@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import _ from 'lodash';
 import ACTIONS from "../modules/action";
 import { connect } from "react-redux";
-import { Row, Col, Input, Card, Spin} from "antd";
+import { Row, Col, Input, Card, Spin, Typography } from "antd";
 import Word from "../components/Word";
 
 const { TextArea } = Input;
+const { Text } = Typography
 
 class Homepage extends Component {
   constructor(params) {
@@ -17,6 +18,11 @@ class Homepage extends Component {
   onTextChangedEvent(e) {
     const { analyseSentence } = this.props
     const text = e.target.value
+
+    if (text.length === 0
+      || (text[text.length - 1] !== ' '
+      && text[text.length - 1] !== '.'))
+      return
 
     let sentences = text.split('.').map(s => s.trim());
     _.forEach(sentences, sentence => {
@@ -33,7 +39,7 @@ class Homepage extends Component {
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, elapsed } = this.props;
 
     return <div>
       <Row style={{marginTop:'100px'}}>
@@ -42,6 +48,7 @@ class Homepage extends Component {
           <p>
             This application analyses the text you input. Please enter your text in the textbox and the application will transform it as you type.
           </p>
+          <Text mark>Analysed in: {elapsed}ms</Text>
         </Col>
       </Row>
       <Row>
@@ -64,7 +71,8 @@ class Homepage extends Component {
 
 const mapStateToProps = state => ({
   analysedWords: state.analysedWords,
-  loading: state.loading
+  loading: state.loading,
+  elapsed: state.elapsed
 });
 
 const mapDispatchToProps = dispatch => ({

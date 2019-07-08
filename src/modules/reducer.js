@@ -8,12 +8,12 @@ const defaultState = {
 const todoReducer = (state = defaultState, action) => {
   switch (action.type) {
     case ACTIONS.Types.ANALYSE_SENTENCE:
-      console.log('REQUESTING...')
-      return { ...state, loading: true };
+      return { ...state, loading: true, time: new Date() };
 
     case ACTIONS.Types.ANALYSE_SENTENCE_SUCCESS:
-      console.log('SUCCESS:', action);
-      return {...state, analysedWords: action.payload.data, loading: false}
+      const now = new Date()
+      const diff = (now - state.time)
+      return {...state, analysedWords: action.payload.data, loading: false, elapsed: diff}
 
     case ACTIONS.Types.ANALYSE_SENTENCE_FAIL:
       return {...state, loading: false}

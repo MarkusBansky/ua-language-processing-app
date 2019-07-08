@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import { Tag } from "antd";
+import { Tag, Tooltip } from "antd";
+import WordWrapper from "./WordWrapper";
 
 function generateColor(word, analysed) {
   if (!word || !analysed) return '';
 
-  if (analysed.lemmas.find(lemma => lemma.value === 'noun')) return 'cyan';
-  if (analysed.lemmas.find(lemma => lemma.value === 'adj')) return 'red';
-  if (analysed.lemmas.find(lemma => lemma.value === 'adv')) return 'volcano';
-  if (analysed.lemmas.find(lemma => lemma.value === 'verb')) return 'blue';
+  if (analysed.tags.find(t => t.tag === 'noun')) return 'cyan';
+  if (analysed.tags.find(t => t.tag === 'adj')) return 'magenta';
+  if (analysed.tags.find(t => t.tag === 'adv')) return 'volcano';
+  if (analysed.tags.find(t => t.tag === 'verb')) return 'blue';
 
   if (word !== analysed.original) return '#f50';
 }
@@ -18,14 +19,39 @@ function jsUcfirst(string)
 }
 
 class Word extends Component {
-  render() {
+  renderWrapper() {
     const { analysedWord, index } = this.props;
     const formulae = analysedWord.analysis && analysedWord.analysis.length > 0 ?
       analysedWord.analysis[0] : null;
 
     let color = generateColor(analysedWord.word, formulae);
     let value = index === 0 ? jsUcfirst(analysedWord.word) : analysedWord.word;
-    return <Tag style={{marginBottom: 5}} color={color}>{value}</Tag>
+
+
+    return <WordWrapper word={value} analysedForms={analysedWord.analysis}>
+      <Tag style={{marginBottom: 5}} color={color}>{value}</Tag>
+    </WordWrapper>
+  }
+
+  renderTooltip() {
+    const { analysedWord, index } = this.props;
+    const tag = analysedWord.analysis && analysedWord.analysis.length === 1
+      ? jsUcfirst(analysedWord.analysis[0].tags.sort((a,b) => a.is_pos < b.is_pos).map(t => t ? t.meaning : '').join(', '))
+      : ''
+
+    return <Tooltip title={tag}>
+      <span className='text-red' style={{marginRight: 8}}>
+        {index === 0 ? jsUcfirst(analysedWord.word) : analysedWord.word}
+      </span>
+    </Tooltip>
+  }
+
+  render() {
+    const { analysedWord } = this.props;
+
+    return analysedWord.analysis && analysedWord.analysis.length > 1
+      ? this.renderWrapper()
+      : this.renderTooltip()
   }
 }
 
