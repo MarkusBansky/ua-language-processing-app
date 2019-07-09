@@ -56,9 +56,11 @@ class WordWrapper extends Component {
   }
 
   createContent(word) {
+    const { pt, nt } = this.props
+
     return <div>
       <p>You can choose the correct POS:</p>
-      <WordTagDropdown word={word} />
+      <WordTagDropdown word={word} pt={pt} nt={nt} />
     </div>
   }
 

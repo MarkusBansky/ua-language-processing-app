@@ -4,9 +4,44 @@ import ACTIONS from "../modules/action";
 import { connect } from "react-redux";
 import { Row, Col, Input, Card, Spin, Typography } from "antd";
 import Word from "../components/Word";
+import Axios from "axios";
 
 const { TextArea } = Input;
 const { Text } = Typography
+
+export function predictPOSTag(tagsForWord, callback) {
+  const client = Axios.create({
+    baseURL:'http://localhost:8080/api/v1',
+    responseType: 'json'
+  });
+
+  client.post('/predictPOSTag', tagsForWord)
+    .then(function (response) {
+    callback(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+export function getTagsForWord(word, pt, nt) {
+  let trainRows = []
+
+  word.variations.forEach(v => {
+    trainRows.push({ leftWordTagId: pt ? pt.id : 0, rightWordTagId: nt ? nt.id : 0, mainWordTagId: v.posTag ? v.posTag.id : 0, correct: 1 })
+  })
+
+  return trainRows
+}
+
+export function getWordBestTag(word) {
+  if (!word) return null
+  const v = word.getBestVariation()
+  if (!v) return null
+  const t = v.posTag
+  if (!t) return null
+  return t
+}
 
 class Homepage extends Component {
   constructor(params) {
@@ -31,10 +66,21 @@ class Homepage extends Component {
   }
 
   renderAnalysedText() {
-    const { analysedWords } = this.props;
+    const { analysedWords, predictPOSTag } = this.props;
 
     return <Card style={{ marginTop: 32 }} >
-      {_.map(analysedWords, (word, i) => <Word key={i} index={i} word={word} />)}
+      {_.map(analysedWords, (word, i) => {
+        let previousWord = i < 1 ? null : analysedWords[i - 1]
+        let nextWord = i === analysedWords.length - 1 ? null : analysedWords[i + 1]
+
+        return <Word
+          key={i}
+          index={i}
+          word={word}
+          pt={getWordBestTag(previousWord)}
+          nt={getWordBestTag(nextWord)}
+        />
+      })}
     </Card>
   }
 

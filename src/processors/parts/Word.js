@@ -9,11 +9,9 @@ export default class Word {
   }
 
   getBestVariation() {
-    // TODO: Change in future to get percentage for the variation
+    console.log(this.variations.sort((a, b) => a.probability < b.probability))
     return !this.variations || this.variations.length === 0
       ? null
-      : this.variations.length === 1
-        ? this.variations[0]
-        : this.variations[0]
+      : this.variations.sort((a, b) => a.probability < b.probability)[0]
   }
 }

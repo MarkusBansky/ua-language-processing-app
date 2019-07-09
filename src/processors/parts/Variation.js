@@ -7,6 +7,13 @@ export default class Variation {
     this.additionalTags = analysis.tags
       .map(t => new Tag(t))
       .filter(t => t.name !== this.posTag.name)
+
+    this.probability = 0
+  }
+
+  setProbability(p) {
+    console.log('Setting probability to ' + p)
+    this.probability = p
   }
 
   extractPosTag(tags) {

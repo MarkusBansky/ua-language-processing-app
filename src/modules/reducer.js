@@ -27,6 +27,40 @@ const todoReducer = (state = defaultState, action) => {
         loading: false
       }
 
+    case ACTIONS.Types.TRAIN_TAGS:
+      return { ...state, loading: true, time: new Date() };
+
+    case ACTIONS.Types.TRAIN_TAGS_SUCCESS:
+      const now2 = new Date()
+      const diff2 = (now2 - state.time)
+
+      console.log('Output:', action.payload.data)
+
+      return { ...state, loading: false, elapsed: diff2 };
+
+    case ACTIONS.Types.TRAIN_TAGS_FAIL:
+      return {
+        ...state,
+        loading: false
+      }
+
+    case ACTIONS.Types.PREDICT_TAGS:
+      return { ...state, loading: true, time: new Date() };
+
+    case ACTIONS.Types.PREDICT_TAGS_SUCCESS:
+      const now3 = new Date()
+      const diff3 = (now3 - state.time)
+
+      console.log('Output:', action.payload.data)
+
+      return { ...state, loading: false, elapsed: diff3 };
+
+    case ACTIONS.Types.PREDICT_TAGS_FAIL:
+      return {
+        ...state,
+        loading: false
+      }
+
     default:
       return state;
   }
