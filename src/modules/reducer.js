@@ -1,4 +1,5 @@
 import ACTIONS from "./action";
+import { preprocessWords } from "../processors/WordPreprocessor";
 
 const defaultState = {
   analysedWords: [],
@@ -13,10 +14,18 @@ const todoReducer = (state = defaultState, action) => {
     case ACTIONS.Types.ANALYSE_SENTENCE_SUCCESS:
       const now = new Date()
       const diff = (now - state.time)
-      return {...state, analysedWords: action.payload.data, loading: false, elapsed: diff}
+      return {
+        ...state,
+        analysedWords: preprocessWords(action.payload.data),
+        loading: false,
+        elapsed: diff
+      }
 
     case ACTIONS.Types.ANALYSE_SENTENCE_FAIL:
-      return {...state, loading: false}
+      return {
+        ...state,
+        loading: false
+      }
 
     default:
       return state;

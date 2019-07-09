@@ -1,57 +1,44 @@
 import React, { Component } from "react";
-import { Tag, Tooltip } from "antd";
+import { Tag } from "antd";
 import WordWrapper from "./WordWrapper";
 
-function generateColor(word, analysed) {
-  if (!word || !analysed) return '';
+function generateColor(word, variation) {
+  if (!word || !variation) return '';
 
-  if (analysed.tags.find(t => t.tag === 'noun')) return 'cyan';
-  if (analysed.tags.find(t => t.tag === 'adj')) return 'magenta';
-  if (analysed.tags.find(t => t.tag === 'adv')) return 'volcano';
-  if (analysed.tags.find(t => t.tag === 'verb')) return 'blue';
-
-  if (word !== analysed.original) return '#f50';
+  if (variation.posTag.name === 'noun') return 'cyan'
+  if (variation.posTag.name === 'adj') return 'magenta'
+  if (variation.posTag.name === 'adv') return 'volcano'
+  if (variation.posTag.name === 'verb') return 'blue'
 }
 
-function jsUcfirst(string)
-{
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+const toFirstUpperLetter = (string) =>
+  string.charAt(0).toUpperCase() + string.slice(1)
 
 class Word extends Component {
-  renderWrapper() {
-    const { analysedWord, index } = this.props;
-    const formulae = analysedWord.analysis && analysedWord.analysis.length > 0 ?
-      analysedWord.analysis[0] : null;
+  renderAsTag(color, text) {
+    return <Tag style={{marginBottom: 5}} color={color}>{text}</Tag>
+  }
 
-    let color = generateColor(analysedWord.word, formulae);
-    let value = index === 0 ? jsUcfirst(analysedWord.word) : analysedWord.word;
+  renderAsText(color, text) {
+    return <span style={{marginRight: 8}}>{text}</span>
+  }
 
+  renderWrapper(color) {
+    const { word, index } = this.props;
+    let text = index === 0 ? toFirstUpperLetter(word.word) : word.word;
 
-    return <WordWrapper word={value} analysedForms={analysedWord.analysis}>
-      <Tag style={{marginBottom: 5}} color={color}>{value}</Tag>
+    return <WordWrapper word={word}>
+      {word.variations && word.variations.length > 1
+        ? this.renderAsTag(color, text)
+        : this.renderAsText(color, text)}
     </WordWrapper>
   }
 
-  renderTooltip() {
-    const { analysedWord, index } = this.props;
-    const tag = analysedWord.analysis && analysedWord.analysis.length === 1
-      ? jsUcfirst(analysedWord.analysis[0].tags.sort((a,b) => a.is_pos < b.is_pos).map(t => t ? t.meaning : '').join(', '))
-      : ''
-
-    return <Tooltip title={tag}>
-      <span className='text-red' style={{marginRight: 8}}>
-        {index === 0 ? jsUcfirst(analysedWord.word) : analysedWord.word}
-      </span>
-    </Tooltip>
-  }
-
   render() {
-    const { analysedWord } = this.props;
+    const { word } = this.props;
+    let color = generateColor(word.word, word.getBestVariation())
 
-    return analysedWord.analysis && analysedWord.analysis.length > 1
-      ? this.renderWrapper()
-      : this.renderTooltip()
+    return this.renderWrapper(color)
   }
 }
 

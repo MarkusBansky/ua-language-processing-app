@@ -34,7 +34,7 @@ class Homepage extends Component {
     const { analysedWords } = this.props;
 
     return <Card style={{ marginTop: 32 }} >
-      {_.map(analysedWords, (word, i) => <Word key={i} index={i} analysedWord={word} />)}
+      {_.map(analysedWords, (word, i) => <Word key={i} index={i} word={word} />)}
     </Card>
   }
 
@@ -63,6 +63,11 @@ class Homepage extends Component {
       <Row>
         <Col span={12} offset={6}>
           {this.renderAnalysedText()}
+        </Col>
+      </Row>
+      <Row style={{marginTop: 25}}>
+        <Col span={12} offset={6}>
+          <div id="word_info"></div>
         </Col>
       </Row>
     </div>

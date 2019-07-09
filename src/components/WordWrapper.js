@@ -1,41 +1,75 @@
 import _ from 'lodash'
 import React, { Component } from "react"
-import { Popover } from 'antd'
-
-function jsUcfirst(string)
-{
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+import ReactDOM from "react-dom"
+import { Popover, Card, Table } from 'antd'
+import WordTagDropdown from './WordTagDropdown';
 
 class WordWrapper extends Component {
-  constructor(params) {
-    super(params)
-    this.state = {
-      tags: []
+  constructor(props) {
+    super(props)
+
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  handleClick(e) {
+    const el = document.getElementById('word_info')
+    const { word } = this.props;
+
+    if (
+      el.innerHTML !== ''
+      && el.getElementsByClassName('ant-card-head-title')[0].innerHTML === word.word) {
+      ReactDOM.unmountComponentAtNode(el)
+      return
     }
+
+    const columns = [
+      { title: 'Name', dataIndex: 'name', key: 'name' },
+      { title: 'Meaning', dataIndex: 'meaning', key: 'meaning' },
+      { title: 'Single', dataIndex: 'single', key: 'single' },
+    ]
+
+    const content = <div className="content">
+      {_.map(word.variations, (v, i) =>
+        <Table
+          bordered
+          key={i}
+          pagination='none'
+          dataSource={v.additionalTags.map((t, j) => {
+            return { ...t, key: j }
+          })}
+          columns={columns}
+          size="middle"
+        />)}
+      </div>
+
+    const wordInfo = <Card title={word.word}>
+      <div className="wrap">
+        <div className="content">{content}</div>
+      </div>
+    </Card>
+
+    ReactDOM.render(wordInfo, el)
   }
 
-  createTitle(word) {
-    return <b>{word}</b>
+  createTitle(w) {
+    return <b>{w.word}</b>
   }
 
-  createContent(forms) {
-    if (!forms || forms.length === 0) return ''
-
+  createContent(word) {
     return <div>
-      {_.map(forms, (form, key) => {
-        if(!form.tags || form.tags.length === 0) return ''
-        return <span key={key}>{jsUcfirst(form.tags.sort((a,b) => a.is_pos < b.is_pos).map(t => t ? t.meaning : '').join(', '))}<br/></span>
-      })}
+      <p>You can choose the correct POS:</p>
+      <WordTagDropdown word={word} />
     </div>
   }
 
   render() {
-    const { word, analysedForms, children } = this.props
+    const { word, children } = this.props
+    const v = word.getBestVariation()
 
     return <Popover
-      content={this.createContent(analysedForms)}
-      title={this.createTitle(word)}
+      onClick={this.handleClick}
+      content={this.createContent(word)}
+      title={v ? v.posTag.meaning : word.word}
     >
       {children}
     </Popover>
