@@ -1,5 +1,6 @@
 // types of action
 const Types = {
+  CHANGE_VARIATION_SELECTION: "CHANGE_VARIATION_SELECTION",
   ANALYSE_SENTENCE: "ANALYSE_SENTENCE",
   ANALYSE_SENTENCE_SUCCESS: "ANALYSE_SENTENCE_SUCCESS",
   ANALYSE_SENTENCE_FAIL: "ANALYSE_SENTENCE_FAIL",
@@ -12,7 +13,7 @@ const Types = {
 };
 
 // actions
-const analyseSentence = sentence => ({
+const analyseSentence = (sentence: string) => ({
   type: 'ANALYSE_SENTENCE',
   payload: {
     request: {
@@ -25,7 +26,15 @@ const analyseSentence = sentence => ({
   }
 });
 
-const traingPOSTag = listOfTagRows => ({
+const selectVariationForWord = (wordId: string, variationId: string) => ({
+  type: Types.CHANGE_VARIATION_SELECTION,
+  payload: {
+    wordId,
+    variationId
+  }
+})
+
+const traingPOSTag = (listOfTagRows: any[]) => ({
   type: "TRAN_TAGS",
   payload: {
     request: {
@@ -36,7 +45,7 @@ const traingPOSTag = listOfTagRows => ({
   }
 });
 
-const predictPOSTag = listOfTagRows => ({
+const predictPOSTag = (listOfTagRows: any[]) => ({
   type: "PREDICT_TAGS",
   payload: {
     request: {
@@ -48,6 +57,7 @@ const predictPOSTag = listOfTagRows => ({
 });
 
 export default {
+  selectVariationForWord,
   analyseSentence,
   traingPOSTag,
   predictPOSTag,

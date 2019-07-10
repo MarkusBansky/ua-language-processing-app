@@ -1,0 +1,45 @@
+import WordVariation from "./WordVariation"
+import { toFirstUpperLetter } from '../../Utils'
+
+const uuidv1 = require('uuid/v1')
+
+export default class SentenceWord {
+  uuid: string = null
+
+  index: number = 0
+  wordValue: string = null
+  variations: WordVariation[] = []
+
+  constructor(wordFromAPI: any, index: number) {
+    this.uuid = uuidv1()
+
+    this.index= index
+    this.wordValue = wordFromAPI.word
+    this.variations = wordFromAPI.analysis
+      ? wordFromAPI.analysis.map((a: WordVariation) => new WordVariation(a))
+      : []
+  }
+
+  getTextValue(): string {
+    return this.index === 0
+      ? toFirstUpperLetter(this.wordValue)
+      : this.wordValue;
+  }
+
+  getVariationById(id: string): WordVariation {
+    if (!id) throw new Error('Variation id does not exist!')
+    return this.variations.find(v => v.uuid === id)
+  }
+
+  getVariationByIndex(index: number): WordVariation {
+    if (index >= this.variations.length) throw new Error('Variation index is out of bounds!')
+    return this.variations[index];
+  }
+
+  getBestVariation(): WordVariation {
+    return !this.variations || this.variations.length === 0
+      ? null
+      : this.variations
+        .sort((a, b) => a.probability < b.probability ? -1 : 1)[0]
+  }
+}

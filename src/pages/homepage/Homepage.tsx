@@ -1,0 +1,43 @@
+import _ from 'lodash'
+import React from 'react'
+import { connect } from 'react-redux'
+import ACTIONS from '../../modules/action'
+import Statistics from './parts/Statistics'
+import { Row, Col, Typography } from 'antd'
+import Title from 'antd/lib/typography/Title'
+import { ReducerState } from '../../modules/reducer'
+import Paragraph from 'antd/lib/typography/Paragraph'
+import TextAnalysisControls from './parts/TextAnalysisControls'
+
+class Homepage extends React.Component {
+  render() {
+    return <div>
+      <Row style={{marginTop:'100px'}}>
+        <Col span={12} offset={4} className='padded-col'>
+          <Typography>
+            <Title>Ukrainian NLP</Title>
+            <Paragraph>
+              This application analyses the text you input. Please enter your text in the textbox and the application will transform it as you type.
+            </Paragraph>
+          </Typography>
+          <TextAnalysisControls />
+        </Col>
+        <Col span={4} className='padded-col'>
+          <Statistics />
+        </Col>
+      </Row>
+    </div>
+  }
+}
+
+const mapStateToProps = (state: ReducerState) => ({
+  sentences: state.sentences,
+  isLoading: state.isLoading,
+  reducerError: state.reducerError
+});
+
+const mapDispatchToProps = dispatch => ({
+  analyseSentence: (sentence: string) => dispatch(ACTIONS.analyseSentence(sentence))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Homepage);
