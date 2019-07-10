@@ -5,7 +5,7 @@ export function generateColorForWord(word: SentenceWord): string {
   const { wordValue } = word;
   const variation = word.getBestVariation()
 
-  if (!wordValue || !variation) return '';
+  if (!wordValue || !variation || !variation.posTag) return '';
 
   if (variation.posTag.name === 'noun') return 'cyan'
   if (variation.posTag.name === 'adj') return 'magenta'

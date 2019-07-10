@@ -4,7 +4,7 @@ import SentencesCard from './SentencesCard'
 import React, { SyntheticEvent } from "react"
 import ACTIONS from "../../../modules/action"
 import TextArea from 'antd/lib/input/TextArea'
-import { Row, Col, Alert, Button, Divider } from 'antd'
+import { Row, Col, Alert, Button, Divider, message } from 'antd'
 import { ReducerState } from '../../../modules/reducer'
 import ButtonGroup from 'antd/lib/button/button-group'
 import Sentence from '../../../processors/parts/Sentence'
@@ -57,6 +57,7 @@ class TextAnalysisControls extends
       }
     })
 
+    message.success('Your TRAIN request has been sent to the server. Please wait while it finishes.', 5);
     console.log(sentencesWordTags)
   }
 
