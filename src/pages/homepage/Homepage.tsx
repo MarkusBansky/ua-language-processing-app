@@ -13,7 +13,7 @@ class Homepage extends React.Component {
   render() {
     return <div>
       <Row style={{marginTop:'100px'}}>
-        <Col span={12} offset={4} className='padded-col'>
+        <Col span={12} offset={3} className='padded-col'>
           <Typography>
             <Title>Ukrainian NLP</Title>
             <Paragraph>
@@ -22,7 +22,7 @@ class Homepage extends React.Component {
           </Typography>
           <TextAnalysisControls />
         </Col>
-        <Col span={4} className='padded-col'>
+        <Col span={6} className='padded-col'>
           <Statistics />
         </Col>
       </Row>

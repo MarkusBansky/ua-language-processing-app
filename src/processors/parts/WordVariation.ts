@@ -2,7 +2,7 @@ import VariationTag from "./VariationTag"
 import { extractPosTag } from '../../Utils'
 import { toFirstUpperLetter } from '../../Utils'
 
-const uuidv1 = require('uuid/v1')
+const uuidv4 = require('uuid/v4')
 
 export default class WordVariation {
   relevantWordId: number = 0
@@ -15,7 +15,7 @@ export default class WordVariation {
 
   constructor(analysis: any) {
     this.relevantWordId = analysis.id
-    this.uuid = uuidv1()
+    this.uuid = uuidv4()
 
     this.posOriginalForm = analysis.original
     this.posTag = extractPosTag(analysis.tags)

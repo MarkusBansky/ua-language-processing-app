@@ -42,13 +42,13 @@ const toggleWordForTraining = (wordId: string) => ({
   }
 })
 
-const traingPOSTag = (listOfTagRows: any[]) => ({
+const traingPOSTag = (sentencesWordsData: any[]) => ({
   type: "TRAN_TAGS",
   payload: {
     request: {
       url: '/trainPOSTag',
       method: 'POST',
-      data: listOfTagRows
+      data: sentencesWordsData
     }
   }
 });

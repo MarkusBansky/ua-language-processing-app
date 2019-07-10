@@ -15,7 +15,8 @@ interface TextAnalysisControlsProps {
   reducerError: any,
   analyseSentence: any,
   selectedVariations: any,
-  selectedWords: any
+  selectedWords: any,
+  traingPOSTag: (sentencesWordsData: any[]) => any
 }
 
 interface TextAnalysisControlsState {
@@ -40,7 +41,7 @@ class TextAnalysisControls extends
   }
 
   handleTrainOnClick() {
-    const { sentences, selectedVariations, selectedWords } = this.props
+    const { sentences, selectedVariations, selectedWords, traingPOSTag } = this.props
     console.log(selectedWords)
 
     const sentencesWordTags = _.map(sentences, sentence => {
@@ -59,6 +60,8 @@ class TextAnalysisControls extends
 
     message.success('Your TRAIN request has been sent to the server. Please wait while it finishes.', 5);
     console.log(sentencesWordTags)
+
+    traingPOSTag(sentencesWordTags)
   }
 
   handleTextOnChange(e: SyntheticEvent) {
@@ -150,7 +153,8 @@ const mapStateToProps = (state: ReducerState) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  analyseSentence: (sentence: string) => dispatch(ACTIONS.analyseSentence(sentence))
+  analyseSentence: (sentence: string) => dispatch(ACTIONS.analyseSentence(sentence)),
+  traingPOSTag: (sentencesWordsData: any[]) => dispatch(ACTIONS.traingPOSTag(sentencesWordsData))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextAnalysisControls);

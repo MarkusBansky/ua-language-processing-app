@@ -1,7 +1,7 @@
 import WordVariation from "./WordVariation"
 import { toFirstUpperLetter } from '../../Utils'
 
-const uuidv1 = require('uuid/v1')
+const uuidv4 = require('uuid/v4')
 
 export default class SentenceWord {
   uuid: string = null
@@ -11,7 +11,7 @@ export default class SentenceWord {
   variations: WordVariation[] = []
 
   constructor(wordFromAPI: any, index: number) {
-    this.uuid = uuidv1()
+    this.uuid = uuidv4()
 
     this.index= index
     this.wordValue = wordFromAPI.word

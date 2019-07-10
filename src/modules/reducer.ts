@@ -1,6 +1,8 @@
+import produce from 'immer'
 import ACTIONS from "./action"
 import { getSentenceFromArray } from "../processors/WordPreprocessor"
 import Sentence from '../processors/parts/Sentence';
+import { message } from 'antd';
 
 export interface ReducerState {
   selectedWords: any,
@@ -24,14 +26,18 @@ const reducer = (
 ) => {
   switch (action.type) {
     case ACTIONS.Types.TOGGLE_WORD_FOR_TRAINING:
-      let sw = state.selectedWords
-      let prevValue: number = sw[action.payload.wordId]
-        ? sw[action.payload.wordId]
-        : false
+      const nextState = produce(state, draftState => {
+        let prevValue: number = draftState.selectedWords[action.payload.wordId]
+          ? draftState.selectedWords[action.payload.wordId]
+          : false
 
-      if(prevValue) delete sw[action.payload.wordId]
-      else sw[action.payload.wordId] = !prevValue
-      return { ...state, selectedVariations: sw }
+        if (prevValue) delete draftState.selectedWords[action.payload.wordId]
+        else draftState.selectedWords[action.payload.wordId] = !prevValue
+      })
+
+
+      console.log(nextState)
+      return nextState
 
     case ACTIONS.Types.CHANGE_VARIATION_SELECTION:
       let sv = state.selectedVariations
@@ -48,6 +54,7 @@ const reducer = (
       return { ...state, sentences: parsedSentences, isLoading: false }
 
     case ACTIONS.Types.ANALYSE_SENTENCE_FAIL:
+      message.error('Some error occured during analysis of the sentence.');
       return { ...state, isLoading: false, reducerError: action.payload.data }
 
     case ACTIONS.Types.TRAIN_TAGS:
@@ -57,6 +64,7 @@ const reducer = (
       return { ...state, isLoading: false }
 
     case ACTIONS.Types.TRAIN_TAGS_FAIL:
+      message.error('An error occured while trying to send train request to the server.');
       return { ...state, isLoading: false, reducerError: action.payload.data }
 
     case ACTIONS.Types.PREDICT_TAGS:
