@@ -20,6 +20,16 @@ export default class SentenceWord {
       : []
   }
 
+  getRelevantId(): number {
+    let v = this.getBestVariation();
+    return v ? v.relevantWordId : 0
+  }
+
+  getRelevantSelectionId(id: string): number {
+    let v = this.getVariationById(id);
+    return v ? v.relevantWordId : 0
+  }
+
   getTextValue(): string {
     return this.index === 0
       ? toFirstUpperLetter(this.wordValue)

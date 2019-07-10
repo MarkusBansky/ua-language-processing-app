@@ -1,5 +1,6 @@
 // types of action
 const Types = {
+  TOGGLE_WORD_FOR_TRAINING: "TOGGLE_WORD_FOR_TRAINING",
   CHANGE_VARIATION_SELECTION: "CHANGE_VARIATION_SELECTION",
   ANALYSE_SENTENCE: "ANALYSE_SENTENCE",
   ANALYSE_SENTENCE_SUCCESS: "ANALYSE_SENTENCE_SUCCESS",
@@ -34,6 +35,13 @@ const selectVariationForWord = (wordId: string, variationId: string) => ({
   }
 })
 
+const toggleWordForTraining = (wordId: string) => ({
+  type: Types.TOGGLE_WORD_FOR_TRAINING,
+  payload: {
+    wordId
+  }
+})
+
 const traingPOSTag = (listOfTagRows: any[]) => ({
   type: "TRAN_TAGS",
   payload: {
@@ -57,6 +65,7 @@ const predictPOSTag = (listOfTagRows: any[]) => ({
 });
 
 export default {
+  toggleWordForTraining,
   selectVariationForWord,
   analyseSentence,
   traingPOSTag,

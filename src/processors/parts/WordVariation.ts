@@ -5,6 +5,7 @@ import { toFirstUpperLetter } from '../../Utils'
 const uuidv1 = require('uuid/v1')
 
 export default class WordVariation {
+  relevantWordId: number = 0
   uuid: string = null
 
   posOriginalForm: string = null
@@ -13,6 +14,7 @@ export default class WordVariation {
   probability: number = 0
 
   constructor(analysis: any) {
+    this.relevantWordId = analysis.id
     this.uuid = uuidv1()
 
     this.posOriginalForm = analysis.original

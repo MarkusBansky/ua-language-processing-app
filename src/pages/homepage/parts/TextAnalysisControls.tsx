@@ -1,20 +1,21 @@
-import React, { SyntheticEvent } from "react"
 import _ from 'lodash'
-import ACTIONS from "../../../modules/action"
 import { connect } from "react-redux"
-import { Row, Col, Alert, Button, Divider } from "antd"
-import Sentence from "../../../processors/parts/Sentence"
-import { ReducerState } from '../../../modules/reducer'
+import SentencesCard from './SentencesCard'
+import React, { SyntheticEvent } from "react"
+import ACTIONS from "../../../modules/action"
 import TextArea from 'antd/lib/input/TextArea'
-import ButtonGroup from 'antd/lib/button/button-group';
-import SentencesCard from './SentencesCard';
+import { Row, Col, Alert, Button, Divider } from 'antd'
+import { ReducerState } from '../../../modules/reducer'
+import ButtonGroup from 'antd/lib/button/button-group'
+import Sentence from '../../../processors/parts/Sentence'
 
 interface TextAnalysisControlsProps {
   sentences: Sentence[],
   isLoading: boolean,
   reducerError: any,
   analyseSentence: any,
-  selectedVariations: any
+  selectedVariations: any,
+  selectedWords: any
 }
 
 interface TextAnalysisControlsState {
@@ -39,18 +40,24 @@ class TextAnalysisControls extends
   }
 
   handleTrainOnClick() {
-    const { sentences, selectedVariations } = this.props
+    const { sentences, selectedVariations, selectedWords } = this.props
+    console.log(selectedWords)
 
-    let inputs = _.map(sentences, sentence => _.map(sentence.words, (word, i) => {
-      let wordVariationId = selectedVariations[word.uuid]
-      let wordVariation = wordVariationId
-        ? word.getVariationById(wordVariationId)
-        : word.getBestVariation()
+    const sentencesWordTags = _.map(sentences, sentence => {
+      return {
+        wordIDs: _.map(sentence.words, word => word.getRelevantId() ),
+        appropriateTagIDs: _.map(sentence.words, word => {
+          let wordVariationId = selectedVariations[word.uuid]
+          let wordVariation = wordVariationId
+            ? word.getVariationById(wordVariationId)
+            : word.getBestVariation()
 
-      return wordVariation && wordVariation.posTag ? wordVariation.posTag.id : 0
-    }))
+          return wordVariation && wordVariation.posTag ? wordVariation.posTag.id : 0
+        })
+      }
+    })
 
-    console.log(inputs)
+    console.log(sentencesWordTags)
   }
 
   handleTextOnChange(e: SyntheticEvent) {
@@ -91,10 +98,10 @@ class TextAnalysisControls extends
         type="primary"
         loading={isLoading}
         onClick={this.handleAnalyseButtonOnClick}>
-          Analyse
+        Analyse
         </Button>
 
-      <ButtonGroup style={{marginLeft: 16}}>
+      <ButtonGroup style={{ marginLeft: 16 }}>
         <Button
           type="default"
           icon="tags"
@@ -137,7 +144,8 @@ const mapStateToProps = (state: ReducerState) => ({
   sentences: state.sentences,
   isLoading: state.isLoading,
   reducerError: state.reducerError,
-  selectedVariations: state.selectedVariations
+  selectedVariations: state.selectedVariations,
+  selectedWords: state.selectedWords
 });
 
 const mapDispatchToProps = dispatch => ({

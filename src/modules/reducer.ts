@@ -3,6 +3,7 @@ import { getSentenceFromArray } from "../processors/WordPreprocessor"
 import Sentence from '../processors/parts/Sentence';
 
 export interface ReducerState {
+  selectedWords: any,
   selectedVariations: any
   sentences: Sentence[]
   isLoading: boolean,
@@ -10,6 +11,7 @@ export interface ReducerState {
 }
 
 const defaultState: ReducerState = {
+  selectedWords: {},
   selectedVariations: {},
   sentences: [],
   isLoading: false,
@@ -21,6 +23,16 @@ const reducer = (
   action: { type: string, payload: any }
 ) => {
   switch (action.type) {
+    case ACTIONS.Types.TOGGLE_WORD_FOR_TRAINING:
+      let sw = state.selectedWords
+      let prevValue: number = sw[action.payload.wordId]
+        ? sw[action.payload.wordId]
+        : false
+
+      if(prevValue) delete sw[action.payload.wordId]
+      else sw[action.payload.wordId] = !prevValue
+      return { ...state, selectedVariations: sw }
+
     case ACTIONS.Types.CHANGE_VARIATION_SELECTION:
       let sv = state.selectedVariations
       sv[action.payload.wordId] = action.payload.variationId

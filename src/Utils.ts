@@ -30,3 +30,12 @@ export function extractPosTag(tags: any): VariationTag {
   }
   return null
 }
+
+export function generateTrainWord(
+  word: SentenceWord, tagLeftId: number, tagRightId: number) {
+  return {
+    tagId: word.getBestVariation().posTag.id,
+    tagLeftId,
+    tagRightId
+  }
+}
