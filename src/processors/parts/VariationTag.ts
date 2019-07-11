@@ -1,6 +1,7 @@
 export default class VariationTag {
   id: number = 0
   name: string = null
+  connected: string = null
   meaning: string = null
   single: boolean = false
 
@@ -9,6 +10,7 @@ export default class VariationTag {
     this.name = tag.tag
     this.meaning = tag.meaning
     this.single = tag.conflicting
+    this.connected = tag.connected
   }
 
   toString(): string {

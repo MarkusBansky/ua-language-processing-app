@@ -54,13 +54,13 @@ const traingPOSTag = (sentencesWordsData: any[]) => ({
   }
 });
 
-const predictPOSTag = (listOfTagRows: any[]) => ({
+const predictPOSTag = (sentencesWordsData: any[]) => ({
   type: "PREDICT_TAGS",
   payload: {
     request: {
       url: '/predictPOSTag',
       method: 'POST',
-      data: listOfTagRows
+      data: sentencesWordsData
     }
   }
 });

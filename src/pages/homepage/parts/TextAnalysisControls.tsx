@@ -16,7 +16,8 @@ interface TextAnalysisControlsProps {
   analyseSentence: any,
   selectedVariations: any,
   selectedWords: any,
-  traingPOSTag: (sentencesWordsData: any[]) => any
+  traingPOSTag: (sentencesWordsData: any[]) => any,
+  predictPOSTag: (sentencesWordsData: any[]) => any
 }
 
 interface TextAnalysisControlsState {
@@ -32,6 +33,8 @@ class TextAnalysisControls extends
       text: "Сьогодні була дуже гарна погода, сонячні промені гарнезно грали на тінях довколишніх дерев."
     }
 
+    this.handlePredictOnClick =
+      this.handlePredictOnClick.bind(this)
     this.handleTrainOnClick =
       this.handleTrainOnClick.bind(this)
     this.handleTextOnChange =
@@ -41,14 +44,14 @@ class TextAnalysisControls extends
   }
 
   handleTrainOnClick() {
-    const { sentences, selectedVariations, selectedWords, traingPOSTag } = this.props
-    console.log(selectedWords)
+    const { sentences, selectedVariations, traingPOSTag } = this.props
+    // console.log(selectedWords)
 
     const sentencesWordTags = _.map(sentences, sentence => {
       return {
         wordInitialTags: _.map(sentence.words, word => {
           let v = word.getBestVariation()
-          return v ? v.getAllTagIDs() : [0]
+          return v && v.posTag ? v.posTag.id : 0
         }),
         wordResultTags: _.map(sentence.words, word => {
           let wordVariationId = selectedVariations[word.uuid]
@@ -56,7 +59,7 @@ class TextAnalysisControls extends
             ? word.getVariationById(wordVariationId)
             : word.getBestVariation()
 
-            return v ? v.getAllTagIDs() : [0]
+            return v && v.posTag ? v.posTag.id : 0
         })
       }
     })
@@ -67,6 +70,24 @@ class TextAnalysisControls extends
     traingPOSTag(sentencesWordTags)
   }
 
+  handlePredictOnClick() {
+    const { sentences, predictPOSTag } = this.props
+
+    const sentencesWordTags = _.map(sentences, sentence => {
+      return {
+        wordInitialTags: _.map(sentence.words, word => {
+          let v = word.getBestVariation()
+          return v && v.posTag ? v.posTag.id : 0
+        }),
+        wordResultTags: []
+      }
+    })
+
+    message.success('Your PREDICT request has been sent to the server. Please wait while it finishes.', 5);
+    console.log(sentencesWordTags)
+
+    predictPOSTag(sentencesWordTags)
+  }
 
   handleTextOnChange(e: SyntheticEvent) {
     this.setState({ ...this.state, text: (e.target as any).value })
@@ -89,9 +110,11 @@ class TextAnalysisControls extends
 
     if (!reducerError) return ''
 
+    let errorDescription = reducerError.response.data.error + '. ' + reducerError.response.data.message
+
     return <Alert
       message="Error Text"
-      description={reducerError}
+      description={errorDescription}
       type="error"
       closable
     />
@@ -120,7 +143,8 @@ class TextAnalysisControls extends
         <Button
           type="default"
           icon="tags"
-          disabled={!canTrain}>
+          disabled={!canTrain}
+          onClick={this.handlePredictOnClick}>
           Predict tags based on neural model
         </Button>
       </ButtonGroup>
@@ -161,7 +185,8 @@ const mapStateToProps = (state: ReducerState) => ({
 
 const mapDispatchToProps = dispatch => ({
   analyseSentence: (index: number, sentence: string) => dispatch(ACTIONS.analyseSentence(index, sentence)),
-  traingPOSTag: (sentencesWordsData: any[]) => dispatch(ACTIONS.traingPOSTag(sentencesWordsData))
+  traingPOSTag: (sentencesWordsData: any[]) => dispatch(ACTIONS.traingPOSTag(sentencesWordsData)),
+  predictPOSTag: (sentencesWordsData: any[]) => dispatch(ACTIONS.predictPOSTag(sentencesWordsData))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextAnalysisControls);

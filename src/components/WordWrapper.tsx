@@ -14,8 +14,14 @@ class WordWrapper extends React.Component<WordWrapperProperties, {}> {
   }
 
   wrapperContent(word: SentenceWord) {
+    if (word.variations.length === 0) {
+      return <span>Word not found in database.</span>
+    }
+    if (word.variations.length === 1) {
+      return <span>{word.getBestVariation().toString()}</span>
+    }
+
     return <div>
-      <p>You can choose the correct POS:</p>
       <WordTagDropdown word={word}/>
     </div>
   }

@@ -18,6 +18,25 @@ export default class SentenceWord {
     this.variations = wordFromAPI.analysis
       ? wordFromAPI.analysis.map((a: WordVariation) => new WordVariation(a))
       : []
+
+    this.mergeVariations()
+  }
+
+  mergeVariations(): void {
+    var mergedVariations: WordVariation[] = []
+
+    this.variations.map(variation => {
+      let exists = mergedVariations
+        .find(v => v.posTag && variation.posTag && v.posTag.id === variation.posTag.id)
+
+      if (!exists) {
+        mergedVariations.push(variation)
+      } else {
+        variation.additionalTags.forEach(tag => exists.mergeTagInto(tag))
+      }
+    })
+
+    this.variations = mergedVariations
   }
 
   getRelevantId(): number {
