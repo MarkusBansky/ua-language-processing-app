@@ -74,9 +74,9 @@ class TextAnalysisControls extends
 
     if (text.length === 0) return
 
-    let sentences = text.split('.').map(s => s.trim());
-    _.forEach(sentences, sentence => {
-      analyseSentence(sentence);
+    let sentences = text.split('.').map(s => s.trim()).filter(s => s !== '');
+    _.forEach(sentences, (sentence, index) => {
+      analyseSentence(index, sentence);
     });
   }
 
@@ -108,13 +108,16 @@ class TextAnalysisControls extends
       <ButtonGroup style={{ marginLeft: 16 }}>
         <Button
           type="default"
-          icon="tags"
+          icon="calculator"
           disabled={!canTrain}
           onClick={this.handleTrainOnClick}>
-          Read tags
+          Train model with selected variations
         </Button>
-        <Button type="default" icon="calculator" disabled={!canTrain}>
-          Train sentences
+        <Button
+          type="default"
+          icon="tags"
+          disabled={!canTrain}>
+          Predict tags based on neural model
         </Button>
       </ButtonGroup>
     </div>
@@ -153,7 +156,7 @@ const mapStateToProps = (state: ReducerState) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  analyseSentence: (sentence: string) => dispatch(ACTIONS.analyseSentence(sentence)),
+  analyseSentence: (index: number, sentence: string) => dispatch(ACTIONS.analyseSentence(index, sentence)),
   traingPOSTag: (sentencesWordsData: any[]) => dispatch(ACTIONS.traingPOSTag(sentencesWordsData))
 });
 

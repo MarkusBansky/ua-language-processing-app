@@ -44,16 +44,20 @@ const reducer = (
       sv[action.payload.wordId] = action.payload.variationId
       return { ...state, selectedVariations: sv }
 
-    case ACTIONS.Types.ANALYSE_SENTENCE:
-      return { ...state, isLoading: true };
+    case ACTIONS.Types.ANALYSE_SENTENCES:
+      return { ...state, sentences: [], isLoading: true };
 
-    case ACTIONS.Types.ANALYSE_SENTENCE_SUCCESS:
+    case ACTIONS.Types.ANALYSE_SENTENCES_SUCCESS:
       // const parsedSentences = action.payload.data
       //   .map((d: any, i: number) => getSentenceFromArray(d, i))
-      const parsedSentences = [getSentenceFromArray(action.payload.data, 0)]
-      return { ...state, sentences: parsedSentences, isLoading: false }
+      const parsedSentence = getSentenceFromArray(action.payload.data)
+      const newStateWithSentences = produce(state, draftState => {
+        draftState.isLoading = false
+        draftState.sentences[parsedSentence.sentenceId] = parsedSentence
+      })
+      return newStateWithSentences
 
-    case ACTIONS.Types.ANALYSE_SENTENCE_FAIL:
+    case ACTIONS.Types.ANALYSE_SENTENCES_FAIL:
       message.error('Some error occured during analysis of the sentence.');
       return { ...state, isLoading: false, reducerError: action.payload.data }
 

@@ -30,7 +30,7 @@ class SentencesCard extends
       <Divider>Result</Divider>
       <Card>
         {_.map(sentences, (sentence, i) =>
-          <div key={i}>{this.renderSentence(sentence)}</div>
+          sentence ? <span key={i}>{this.renderSentence(sentence)}. </span> : ''
         )}
         <Divider dashed />
         <Alert

@@ -2,9 +2,9 @@
 const Types = {
   TOGGLE_WORD_FOR_TRAINING: "TOGGLE_WORD_FOR_TRAINING",
   CHANGE_VARIATION_SELECTION: "CHANGE_VARIATION_SELECTION",
-  ANALYSE_SENTENCE: "ANALYSE_SENTENCE",
-  ANALYSE_SENTENCE_SUCCESS: "ANALYSE_SENTENCE_SUCCESS",
-  ANALYSE_SENTENCE_FAIL: "ANALYSE_SENTENCE_FAIL",
+  ANALYSE_SENTENCES: "ANALYSE_SENTENCES",
+  ANALYSE_SENTENCES_SUCCESS: "ANALYSE_SENTENCES_SUCCESS",
+  ANALYSE_SENTENCES_FAIL: "ANALYSE_SENTENCES_FAIL",
   TRAIN_TAGS: "TRAIN_TAGS",
   TRAIN_TAGS_SUCCESS: "TRAIN_TAGS_SUCCESS",
   TRAIN_TAGS_FAIL: "TRAIN_TAGS_FAIL",
@@ -14,13 +14,14 @@ const Types = {
 };
 
 // actions
-const analyseSentence = (sentence: string) => ({
-  type: 'ANALYSE_SENTENCE',
+const analyseSentence = (index: number, sentence: string) => ({
+  type: 'ANALYSE_SENTENCES',
   payload: {
     request: {
       url: '/analyse',
       method: 'POST',
       data: {
+        index,
         sentence
       }
     }

@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import ACTIONS from '../../modules/action'
 import Statistics from './parts/Statistics'
 import { Row, Col, Typography } from 'antd'
 import Title from 'antd/lib/typography/Title'
@@ -36,8 +35,4 @@ const mapStateToProps = (state: ReducerState) => ({
   reducerError: state.reducerError
 });
 
-const mapDispatchToProps = dispatch => ({
-  analyseSentence: (sentence: string) => dispatch(ACTIONS.analyseSentence(sentence))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Homepage);
+export default connect(mapStateToProps, null)(Homepage);
