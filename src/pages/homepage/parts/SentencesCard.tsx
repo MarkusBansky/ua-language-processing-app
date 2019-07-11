@@ -30,12 +30,12 @@ class SentencesCard extends
       <Divider>Result</Divider>
       <Card>
         {_.map(sentences, (sentence, i) =>
-          sentence ? <span key={i}>{this.renderSentence(sentence)}. </span> : ''
+          sentence ? <div key={i}>{this.renderSentence(sentence)}. </div> : ''
         )}
         <Divider dashed />
         <Alert
           message="Training and Predicting"
-          description="Some words can have multiple variations available. Each variation has a diffirent sequence of tags for it. In the sentence you can only have a single variation selected. To do this right, a neural network service is used and you are able to train it and evaluate the predictions for current sentence. To use this service you can adjust each variation selection by hovering the word and selecting correct variation from a dropdown that appears. Later to train the model you may click one of the buttons above, the other one is for predicting."
+          description="Some words can have multiple variations available. In the sentence you can only have a single variation selected. To use this service you can adjust each variation selection by hovering the word and selecting correct variation from a dropdown that appears. Later to train the model you may click one of the buttons above, the other one is for predicting."
           type="info"
         />
       </Card>

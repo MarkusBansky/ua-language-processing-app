@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Card, Statistic, Timeline, Alert } from 'antd'
+import { Card, Timeline, Alert } from 'antd'
 import { ReducerState } from '../../../modules/reducer'
 import Sentence from '../../../processors/parts/Sentence'
 import SentenceWord from '../../../processors/parts/SentenceWord';
@@ -40,8 +40,8 @@ class Statistics extends React.Component<StatisticsProps, {}> {
     if (Object.keys(selectedWords).length === 0)
       return <Alert message="Click on the analysed word tag in order to select or deselect it." type="info"/>
 
-    return <Card title="Selected words">
-      <Timeline>
+    return <Card title="Selected words" size="small">
+      <Timeline style={{paddingTop: 16}}>
         {_.map(sentences, (sentence, sIndex) => sentence.words
           .filter(word => selectedWords[word.uuid] === true)
           .map((word, wIndex) =>
@@ -53,7 +53,7 @@ class Statistics extends React.Component<StatisticsProps, {}> {
 
   render() {
     return <div>
-      <Card title="Usage analysis and statisitcs" style={{marginBottom: 16}}>
+      {/* <Card title="Usage analysis and statisitcs" style={{marginBottom: 16}}>
         <Row gutter={16}>
           <Col span={12}>
             <Statistic title="Last call in" value={93} suffix=" ms" />
@@ -62,7 +62,7 @@ class Statistics extends React.Component<StatisticsProps, {}> {
             <Statistic title="Calls made" value={3} />
           </Col>
         </Row>
-      </Card>
+      </Card> */}
       {this.renderSelectedWords()}
     </div>
   }

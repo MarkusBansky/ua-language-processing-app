@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import { connect } from "react-redux"
-import SentencesCard from './SentencesCard'
 import React, { SyntheticEvent } from "react"
 import ACTIONS from "../../../modules/action"
 import TextArea from 'antd/lib/input/TextArea'
@@ -152,8 +151,6 @@ class TextAnalysisControls extends
   }
 
   render() {
-    const { sentences } = this.props
-
     return <div>
       <Row>
         <Col>
@@ -167,9 +164,6 @@ class TextAnalysisControls extends
         </Col>
       </Row>
       <Row><Col>{this.renderActionButtons()}</Col></Row>
-      <Row><Col>
-        <SentencesCard sentences={sentences} />
-      </Col></Row>
       <Row><Col>{this.renderError()}</Col></Row>
     </div>
   }
