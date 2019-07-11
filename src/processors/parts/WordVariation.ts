@@ -29,6 +29,12 @@ export default class WordVariation {
     this.probability = p
   }
 
+  getAllTagIDs(): number[] {
+    let result = this.posTag ? [this.posTag.id] : []
+    this.additionalTags.forEach(tag => result.push(tag.id))
+    return result
+  }
+
   toString(): string {
     let at = ': ' + this.additionalTags
       .map(t => t.meaning)

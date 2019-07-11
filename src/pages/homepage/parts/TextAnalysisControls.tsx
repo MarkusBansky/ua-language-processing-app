@@ -46,14 +46,17 @@ class TextAnalysisControls extends
 
     const sentencesWordTags = _.map(sentences, sentence => {
       return {
-        wordIDs: _.map(sentence.words, word => word.getRelevantId() ),
-        appropriateTagIDs: _.map(sentence.words, word => {
+        wordInitialTags: _.map(sentence.words, word => {
+          let v = word.getBestVariation()
+          return v ? v.getAllTagIDs() : [0]
+        }),
+        wordResultTags: _.map(sentence.words, word => {
           let wordVariationId = selectedVariations[word.uuid]
-          let wordVariation = wordVariationId
+          let v = wordVariationId
             ? word.getVariationById(wordVariationId)
             : word.getBestVariation()
 
-          return wordVariation && wordVariation.posTag ? wordVariation.posTag.id : 0
+            return v ? v.getAllTagIDs() : [0]
         })
       }
     })
@@ -63,6 +66,7 @@ class TextAnalysisControls extends
 
     traingPOSTag(sentencesWordTags)
   }
+
 
   handleTextOnChange(e: SyntheticEvent) {
     this.setState({ ...this.state, text: (e.target as any).value })
