@@ -14,7 +14,7 @@ interface WordProperties {
 }
 
 class Word extends React.Component<WordProperties, { selected: boolean }> {
-  constructor(params) {
+  constructor(params: any) {
     super(params)
 
     this.state = {
@@ -44,8 +44,13 @@ class Word extends React.Component<WordProperties, { selected: boolean }> {
   renderWrapper(color: string) {
     const { word } = this.props;
 
+    const isAnyTag = color !== ''
+
     return <WordWrapper word={word}>
-      {this.renderTagWithText(word, color)}
+      {isAnyTag
+        ? this.renderTagWithText(word, color)
+        : <span style={{ marginRight: 6 }}>{word.getTextValue()}</span>
+      }
     </WordWrapper>
   }
 
@@ -61,7 +66,7 @@ const mapStateToProps = (state: ReducerState) => ({
   selectedWords: state.selectedWords
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: any) => ({
   toggleWordForTraining: (wordId: string) => dispatch(ACTIONS.toggleWordForTraining(wordId))
 });
 

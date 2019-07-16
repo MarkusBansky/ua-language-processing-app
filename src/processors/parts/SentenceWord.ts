@@ -3,40 +3,27 @@ import { toFirstUpperLetter } from '../../Utils'
 
 const uuidv4 = require('uuid/v4')
 
-export default class SentenceWord {
-  uuid: string = null
+const variationSortFunction = (a: any, b: any) => a.uuid.localeCompare(a.uuid)
 
-  index: number = 0
-  wordValue: string = null
+export default class SentenceWord {
+  uuid: string = ''
+
+  sentenceIndex: number = 0
+  wordIndex: number = 0
+  wordValue: string = ''
   variations: WordVariation[] = []
 
-  constructor(wordFromAPI: any, index: number) {
+  constructor(wordFromAPI: any, wordIndex: number, sentenceIndex: number) {
     this.uuid = uuidv4()
 
-    this.index= index
+    this.wordIndex = wordIndex
+    this.sentenceIndex = sentenceIndex
     this.wordValue = wordFromAPI.word
-    this.variations = wordFromAPI.analysis
-      ? wordFromAPI.analysis.map((a: WordVariation) => new WordVariation(a))
+    this.variations = wordFromAPI.variations
+      ? wordFromAPI.variations.map((v: WordVariation) => new WordVariation(v))
       : []
 
-    this.mergeVariations()
-  }
-
-  mergeVariations(): void {
-    var mergedVariations: WordVariation[] = []
-
-    this.variations.map(variation => {
-      let exists = mergedVariations
-        .find(v => v.posTag && variation.posTag && v.posTag.id === variation.posTag.id)
-
-      if (!exists) {
-        mergedVariations.push(variation)
-      } else {
-        variation.additionalTags.forEach(tag => exists.mergeTagInto(tag))
-      }
-    })
-
-    this.variations = mergedVariations
+    this.variations = this.variations.sort(variationSortFunction)
   }
 
   getRelevantId(): number {
@@ -50,12 +37,12 @@ export default class SentenceWord {
   }
 
   getTextValue(): string {
-    return this.index === 0
+    return this.wordIndex === 0
       ? toFirstUpperLetter(this.wordValue)
       : this.wordValue;
   }
 
-  getVariationById(id: string): WordVariation {
+  getVariationById(id: string): WordVariation | undefined {
     if (!id) throw new Error('Variation id does not exist!')
     return this.variations.find(v => v.uuid === id)
   }
@@ -65,10 +52,9 @@ export default class SentenceWord {
     return this.variations[index];
   }
 
-  getBestVariation(): WordVariation {
+  getBestVariation(): WordVariation | null {
     return !this.variations || this.variations.length === 0
       ? null
-      : this.variations
-        .sort((a, b) => a.probability < b.probability ? -1 : 1)[0]
+      : this.variations.sort(variationSortFunction)[0]
   }
 }

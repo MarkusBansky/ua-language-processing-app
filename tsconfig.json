@@ -17,7 +17,7 @@
     "noImplicitThis": true,
     "noImplicitAny": false,
     "importHelpers": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "skipLibCheck": true,

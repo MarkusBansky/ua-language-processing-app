@@ -13,7 +13,7 @@ interface WordTagDropdownProperties {
 }
 
 interface WordTagDropdownState {
-  selectedVariation: WordVariation
+  selectedVariation: WordVariation | null
 }
 
 class WordTagDropdown extends
@@ -68,7 +68,7 @@ class WordTagDropdown extends
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: any) => ({
   selectVariationForWord: (wordId: string, variationId: string) => dispatch(ACTIONS.selectVariationForWord(wordId, variationId))
 });
 

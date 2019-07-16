@@ -1,3 +1,5 @@
+import { NEURAL_API, DICTIONARY_API } from '../App'
+
 // types of action
 const Types = {
   TOGGLE_WORD_FOR_TRAINING: "TOGGLE_WORD_FOR_TRAINING",
@@ -18,7 +20,7 @@ const analyseSentence = (index: number, sentence: string) => ({
   type: 'ANALYSE_SENTENCES',
   payload: {
     request: {
-      url: '/analyse',
+      url: DICTIONARY_API + '/analyse',
       method: 'POST',
       data: {
         index,
@@ -47,7 +49,7 @@ const traingPOSTag = (sentencesWordsData: any[]) => ({
   type: "TRAN_TAGS",
   payload: {
     request: {
-      url: '/trainPOSTag',
+      url: NEURAL_API + '/grammar/train',
       method: 'POST',
       data: sentencesWordsData
     }
@@ -58,7 +60,7 @@ const predictPOSTag = (sentencesWordsData: any[]) => ({
   type: "PREDICT_TAGS",
   payload: {
     request: {
-      url: '/predictPOSTag',
+      url: NEURAL_API + '/grammar/predict',
       method: 'POST',
       data: sentencesWordsData
     }

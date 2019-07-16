@@ -1,16 +1,18 @@
 export default class VariationTag {
   id: number = 0
-  name: string = null
-  connected: string = null
-  meaning: string = null
+  name: string = ''
+  connected: string = ''
+  meaning: string = ''
   single: boolean = false
+  isMainPOS: boolean = false
 
   constructor(tag: any) {
     this.id = tag.id
-    this.name = tag.tag
-    this.meaning = tag.meaning
-    this.single = tag.conflicting
-    this.connected = tag.connected
+    this.name = tag.tagName
+    this.meaning = tag.description
+    this.single = tag.isConflicting
+    this.connected = tag.connectedTagName
+    this.isMainPOS = tag.isMainPartOfSpeech
   }
 
   toString(): string {

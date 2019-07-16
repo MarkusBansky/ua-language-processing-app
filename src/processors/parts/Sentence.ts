@@ -12,4 +12,12 @@ export default class Sentence {
   getWord(i: number): SentenceWord {
     return this.words[i]
   }
+
+  hasWordById(uuid: string): boolean {
+    return this.getWordById(uuid) !== undefined
+  }
+
+  getWordById(uuid: string): SentenceWord | undefined {
+    return this.words.find(word => word.uuid === uuid)
+  }
 }

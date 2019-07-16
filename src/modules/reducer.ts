@@ -3,10 +3,9 @@ import ACTIONS from "./action"
 import { getSentenceFromArray } from "../processors/WordPreprocessor"
 import Sentence from '../processors/parts/Sentence';
 import { message } from 'antd';
-import { sortCollectionByParam } from '../Utils'
 
 export interface ReducerState {
-  selectedWords: any,
+  selectedWords: string[],
   selectedVariations: any
   sentences: Sentence[]
   isLoading: boolean,
@@ -14,11 +13,11 @@ export interface ReducerState {
 }
 
 const defaultState: ReducerState = {
-  selectedWords: {},
+  selectedWords: [],
   selectedVariations: {},
   sentences: [],
   isLoading: false,
-  reducerError: null
+  reducerError: ''
 };
 
 const reducer = (
@@ -28,12 +27,15 @@ const reducer = (
   switch (action.type) {
     case ACTIONS.Types.TOGGLE_WORD_FOR_TRAINING:
       const nextState = produce(state, draftState => {
-        let prevValue: number = draftState.selectedWords[action.payload.wordId]
-          ? draftState.selectedWords[action.payload.wordId]
-          : false
+        let wordWasSelected = draftState.selectedWords
+          .find(w => w === action.payload.wordId)
 
-        if (prevValue) delete draftState.selectedWords[action.payload.wordId]
-        else draftState.selectedWords[action.payload.wordId] = !prevValue
+        if (wordWasSelected) {
+          draftState.selectedWords = draftState.selectedWords
+            .filter(w => w !== action.payload.wordId)
+        } else {
+          draftState.selectedWords.push(action.payload.wordId)
+        }
       })
 
       return nextState
@@ -75,22 +77,8 @@ const reducer = (
       return { ...state, isLoading: true }
 
     case ACTIONS.Types.PREDICT_TAGS_SUCCESS:
-      for (var i = 0; i < state.sentences.length; i++) {
-        var sentence = state.sentences[i]
-        var sentencePredictions = action.payload.data[i]
-
-        for (var j = 0; j < sentence.words.length; j++) {
-          var wordPredicitons = sentencePredictions[j]
-          var word = state.sentences[i].words[j]
-
-          wordPredicitons = wordPredicitons
-            // Get only first 5 digits after 0
-            .map((w, i) => { return { value: parseFloat(w.toFixed(5)), index: i } })
-            // Sort by values
-            .sort(sortCollectionByParam('value', true, null))
-
-          console.log(word.wordValue, wordPredicitons)
-        }
+      for (var i = 0; i < action.payload.data.length; i++) {
+        console.log(action.payload.data[i])
       }
       return { ...state, isLoading: false }
 

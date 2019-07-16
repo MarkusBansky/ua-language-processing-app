@@ -7,6 +7,9 @@ import { Row, Col, Alert, Button, Divider, message } from 'antd'
 import { ReducerState } from '../../../modules/reducer'
 import ButtonGroup from 'antd/lib/button/button-group'
 import Sentence from '../../../processors/parts/Sentence'
+import SentenceWord from '../../../processors/parts/SentenceWord';
+import TrainRequest from '../../../processors/TrainRequest';
+import { findWordInSentences } from '../../../Utils';
 
 interface TextAnalysisControlsProps {
   sentences: Sentence[],
@@ -29,7 +32,7 @@ class TextAnalysisControls extends
     super(params);
 
     this.state = {
-      text: "Сьогодні була дуже гарна погода, сонячні промені гарнезно грали на тінях довколишніх дерев."
+      text: "Сьогодні була дуже гарна погода, сонячні промені грали на тінях довколишніх дерев."
     }
 
     this.handlePredictOnClick =
@@ -42,50 +45,59 @@ class TextAnalysisControls extends
       this.handleAnalyseButtonOnClick.bind(this)
   }
 
-  handleTrainOnClick() {
-    const { sentences, selectedVariations, traingPOSTag } = this.props
-    // console.log(selectedWords)
+  getSelectedWords(): TrainRequest[] {
+    const { sentences, selectedVariations, selectedWords } = this.props
 
-    const sentencesWordTags = _.map(sentences, sentence => {
-      return {
-        wordInitialTags: _.map(sentence.words, word => {
-          let v = word.getBestVariation()
-          return v && v.posTag ? v.posTag.id : 0
-        }),
-        wordResultTags: _.map(sentence.words, word => {
-          let wordVariationId = selectedVariations[word.uuid]
-          let v = wordVariationId
-            ? word.getVariationById(wordVariationId)
-            : word.getBestVariation()
+    var requests = selectedWords.map((wordId: string) => {
+      let word: SentenceWord = findWordInSentences(wordId, sentences) as any
+      let hasSelectedVariation = selectedVariations[word.uuid] !== undefined
+      let selectedVariation = hasSelectedVariation ?
+        word.getVariationById(selectedVariations[word.uuid])
+        : word.getBestVariation()
 
-            return v && v.posTag ? v.posTag.id : 0
-        })
+      let request = new TrainRequest()
+      request.wordId = word.uuid
+
+      // Set selected word values for this request
+      request.selectedWordPOSTagId = selectedVariation!.posTag!.id
+      request.selectedWordPredictedTagId = selectedVariation!.additionalTags.find(t => t.name.startsWith('v_'))!.id - 54 || 0
+
+      let numberOfWords = sentences[word.sentenceIndex].words.length
+
+      // Set left word if it exists
+      if (word.wordIndex !== 0) {
+        request.leftWordPOSTagId = sentences[word.sentenceIndex]
+          .getWord(word.wordIndex - 1).getBestVariation()!.posTag!.id || 0
+      } else {
+        request.leftWordPOSTagId = 0
       }
+
+      // Set right word if it exists
+      if (word.wordIndex !== numberOfWords - 1) {
+        request.rightWordPOSTagId = sentences[word.sentenceIndex]
+          .getWord(word.wordIndex + 1).getBestVariation()!.posTag!.id || 0
+      } else {
+        request.rightWordPOSTagId = 0
+      }
+
+      return request
     })
 
-    message.success('Your TRAIN request has been sent to the server. Please wait while it finishes.', 5);
-    console.log(sentencesWordTags)
+    return requests
+  }
 
-    traingPOSTag(sentencesWordTags)
+  handleTrainOnClick() {
+    const { traingPOSTag } = this.props
+
+    message.success('Your TRAIN request has been sent to the server. Please wait while it finishes.', 5);
+    traingPOSTag(this.getSelectedWords())
   }
 
   handlePredictOnClick() {
-    const { sentences, predictPOSTag } = this.props
-
-    const sentencesWordTags = _.map(sentences, sentence => {
-      return {
-        wordInitialTags: _.map(sentence.words, word => {
-          let v = word.getBestVariation()
-          return v && v.posTag ? v.posTag.id : 0
-        }),
-        wordResultTags: []
-      }
-    })
+    const { predictPOSTag } = this.props
 
     message.success('Your PREDICT request has been sent to the server. Please wait while it finishes.', 5);
-    console.log(sentencesWordTags)
-
-    predictPOSTag(sentencesWordTags)
+    predictPOSTag(this.getSelectedWords())
   }
 
   handleTextOnChange(e: SyntheticEvent) {
@@ -177,7 +189,7 @@ const mapStateToProps = (state: ReducerState) => ({
   selectedWords: state.selectedWords
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: any) => ({
   analyseSentence: (index: number, sentence: string) => dispatch(ACTIONS.analyseSentence(index, sentence)),
   traingPOSTag: (sentencesWordsData: any[]) => dispatch(ACTIONS.traingPOSTag(sentencesWordsData)),
   predictPOSTag: (sentencesWordsData: any[]) => dispatch(ACTIONS.predictPOSTag(sentencesWordsData))

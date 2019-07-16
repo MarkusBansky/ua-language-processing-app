@@ -10,6 +10,9 @@ import './styles/main.scss'
 
 const reduxStore = configureStore((window as any).REDUX_INITIAL_DATA)
 
+export const DICTIONARY_API = 'http://localhost:8080/api/v1'
+export const NEURAL_API = 'http://localhost:8081/api/v1'
+
 class App extends React.Component {
   render() {
     return (

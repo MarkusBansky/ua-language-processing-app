@@ -1,5 +1,6 @@
 import VariationTag from "./processors/parts/VariationTag"
 import SentenceWord from "./processors/parts/SentenceWord"
+import Sentence from './processors/parts/Sentence';
 
 export function sortCollectionByParam(field, reverse, primer){
 
@@ -14,15 +15,25 @@ export function sortCollectionByParam(field, reverse, primer){
   }
 }
 
+export function findWordInSentences
+  (wordId: string, sentences: Sentence[]): SentenceWord | undefined {
+  for (var i = 0; i < sentences.length; i++) {
+    if (sentences[i].hasWordById(wordId)) {
+      return sentences[i].getWordById(wordId)
+    }
+  }
+  return undefined
+}
+
 export function generateColorForWord(word: SentenceWord): string {
   const { wordValue } = word;
   const variation = word.getBestVariation()
 
   if (!wordValue || !variation || !variation.posTag) return '';
 
-  if (variation.posTag.name === 'noun') return 'cyan'
+  if (variation.posTag.name === 'noun') return 'orange'
   if (variation.posTag.name === 'adj') return 'magenta'
-  if (variation.posTag.name === 'adv') return 'volcano'
+  if (variation.posTag.name === 'adv') return 'green'
   if (variation.posTag.name === 'verb') return 'blue'
 
   return ''
@@ -33,9 +44,9 @@ export function toFirstUpperLetter(s: string): string {
 }
 
 
-export function extractPosTag(tags: any): VariationTag {
+export function extractPosTag(tags: any): VariationTag | null {
   for (var i = 0; i < tags.length; i++)
-    if (tags[i].is_pos)
+    if (tags[i].isMainPartOfSpeech)
       return new VariationTag(tags[i])
 
   if (tags.length === 0) {
@@ -47,7 +58,7 @@ export function extractPosTag(tags: any): VariationTag {
 export function generateTrainWord(
   word: SentenceWord, tagLeftId: number, tagRightId: number) {
   return {
-    tagId: word.getBestVariation().posTag.id,
+    tagId: word.getBestVariation()!.posTag!.id,
     tagLeftId,
     tagRightId
   }
