@@ -23,6 +23,9 @@ class Homepage extends React.Component<{ sentences: Sentence[] }, {}> {
           <SentencesCard sentences={sentences} />
         </Col>
         <Col span={6} className='padded-col' >
+        <Typography>
+            <Title level={3}>Selected words</Title>
+          </Typography>
           <Statistics />
         </Col>
       </Row>

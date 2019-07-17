@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Card, Timeline } from 'antd'
+import { Card, Timeline, Empty } from 'antd'
 import { ReducerState } from '../../../modules/reducer'
 import Sentence from '../../../processors/parts/Sentence'
 import SentenceWord from '../../../processors/parts/SentenceWord';
@@ -29,6 +29,18 @@ class Statistics extends React.Component<StatisticsProps, {}> {
     return sentencesUpdated || selectedWordsUpdated;
   }
 
+  renderEmpty() {
+    return <Empty
+      image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+      imageStyle={{height: 60}}
+      style={{marginTop: 60}}
+      description={
+        <span>You have no words selected</span>
+      }
+    >
+    </Empty>
+  }
+
   renderWord(word: SentenceWord): JSX.Element {
     return <span>
       <b>{word.getTextValue().toUpperCase()} </b> - {(word.getBestVariation() as WordVariation).toString()}
@@ -38,7 +50,8 @@ class Statistics extends React.Component<StatisticsProps, {}> {
   renderSelectedWords(): JSX.Element {
     const { sentences, selectedWords } = this.props
 
-    if (Object.keys(selectedWords).length === 0) return <></>
+    if (Object.keys(selectedWords).length === 0)
+      return this.renderEmpty()
 
     return <Card title="Selected words" size="small" >
       <Timeline style={{ paddingTop: 16 }}>

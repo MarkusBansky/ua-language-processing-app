@@ -9,7 +9,7 @@ import ButtonGroup from 'antd/lib/button/button-group'
 import Sentence from '../../../processors/parts/Sentence'
 import SentenceWord from '../../../processors/parts/SentenceWord';
 import TrainRequest from '../../../processors/TrainRequest';
-import { findWordInSentences } from '../../../Utils';
+import { findWordInSentences } from '../../../utils/Utils';
 
 interface TextAnalysisControlsProps {
   sentences: Sentence[],

@@ -1,6 +1,7 @@
-import VariationTag from "./processors/parts/VariationTag"
-import SentenceWord from "./processors/parts/SentenceWord"
-import Sentence from './processors/parts/Sentence';
+import VariationTag from "../processors/parts/VariationTag"
+import SentenceWord from "../processors/parts/SentenceWord"
+import Sentence from '../processors/parts/Sentence';
+import { WordTagColors } from './Colors';
 
 export function sortCollectionByParam(field, reverse, primer){
 
@@ -31,10 +32,16 @@ export function generateColorForWord(word: SentenceWord): string {
 
   if (!wordValue || !variation || !variation.posTag) return '';
 
-  if (variation.posTag.name === 'noun') return 'orange'
-  if (variation.posTag.name === 'adj') return 'magenta'
-  if (variation.posTag.name === 'adv') return 'green'
-  if (variation.posTag.name === 'verb') return 'blue'
+  // TODO: Here is a color for the word that has no best variation and has multiple tag variations
+  let sortedVariations = word.variations.sort((a, b) => a.probability > b.probability ? 1 : -1)
+  if (sortedVariations.length > 1 && sortedVariations[0].probability - sortedVariations[1].probability <= 0.5 && sortedVariations.some(v => v.additionalTags.some(t => t.name.startsWith('v_')))) {
+    return WordTagColors.Unpredicted
+  }
+
+  if (variation.posTag.name === 'noun') return WordTagColors.Noun
+  if (variation.posTag.name === 'adj') return WordTagColors.Adjective
+  if (variation.posTag.name === 'adv') return WordTagColors.Adverb
+  if (variation.posTag.name === 'verb') return WordTagColors.Verb
 
   return ''
 }

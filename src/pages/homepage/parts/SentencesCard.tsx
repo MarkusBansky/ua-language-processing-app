@@ -1,10 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { Card, Alert, Divider, Skeleton } from 'antd'
+import { Card, Alert, Divider, Skeleton, Tag } from 'antd'
 import Word from '../../../components/Word'
 import Sentence from '../../../processors/parts/Sentence'
 import { ReducerState } from '../../../modules/reducer';
+import { WordTagColors } from '../../../utils/Colors';
 
 interface SentencesCardProps {
   sentences: Sentence[],
@@ -21,12 +22,20 @@ class SentencesCard extends
     return sentence.words.map((word, i) => <Word key={i} word={word} />)
   }
 
+  displayMarkings() {
+    return _.map(Object.keys(WordTagColors), (color, index) => {
+      return <Tag key={index} color={WordTagColors[color]}>{color}</Tag>
+    })
+  }
+
   render() {
     const { sentences, isLoading } = this.props;
 
     if (sentences.length === 0) return ''
 
     return <Skeleton loading={isLoading} active>
+      {/* <Divider>Word tag markings</Divider>
+      {this.displayMarkings()} */}
       <Divider>Result</Divider>
       <Card>
         {_.map(sentences, (sentence, i) =>

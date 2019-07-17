@@ -1,6 +1,6 @@
 import VariationTag from "./VariationTag"
-import { extractPosTag } from '../../Utils'
-import { toFirstUpperLetter } from '../../Utils'
+import { extractPosTag } from '../../utils/Utils'
+import { toFirstUpperLetter } from '../../utils/Utils'
 
 const uuidv4 = require('uuid/v4')
 

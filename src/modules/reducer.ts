@@ -41,12 +41,21 @@ const reducer = (
       return nextState
 
     case ACTIONS.Types.CHANGE_VARIATION_SELECTION:
-      let sv = state.selectedVariations
-      sv[action.payload.wordId] = action.payload.variationId
-      return { ...state, selectedVariations: sv }
+      const changedVariationState = produce(state, draftState => {
+        draftState.selectedVariations[action.payload.wordId] = action.payload.variationId
+
+        let wordWasSelected = draftState.selectedWords
+          .find(w => w === action.payload.wordId)
+
+        if (!wordWasSelected) {
+          draftState.selectedWords.push(action.payload.wordId)
+        }
+      })
+
+      return changedVariationState
 
     case ACTIONS.Types.ANALYSE_SENTENCES:
-      return { ...state, sentences: [], isLoading: true };
+      return { ...state, sentences: [], selectedVariations: {}, selectedWords: [], isLoading: true };
 
     case ACTIONS.Types.ANALYSE_SENTENCES_SUCCESS:
       // const parsedSentences = action.payload.data

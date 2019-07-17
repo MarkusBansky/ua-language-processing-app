@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tag, Badge } from 'antd'
 import WordWrapper from './WordWrapper'
-import { generateColorForWord } from '../Utils'
+import { generateColorForWord } from '../utils/Utils'
 import SentenceWord from '../processors/parts/SentenceWord';
 import { connect } from 'react-redux';
 import ACTIONS from '../modules/action'
@@ -13,13 +13,9 @@ interface WordProperties {
   toggleWordForTraining: (wordId: string) => any
 }
 
-class Word extends React.Component<WordProperties, { selected: boolean }> {
+class Word extends React.Component<WordProperties, {}> {
   constructor(params: any) {
     super(params)
-
-    this.state = {
-      selected: false
-    }
 
     this.toggleWordSelection =
       this.toggleWordSelection.bind(this)
@@ -27,8 +23,6 @@ class Word extends React.Component<WordProperties, { selected: boolean }> {
 
   toggleWordSelection(wordId: string) {
     const { toggleWordForTraining } = this.props
-    this.setState({ ...this.state, selected: !this.state.selected })
-
     toggleWordForTraining(wordId)
   }
 
@@ -55,8 +49,10 @@ class Word extends React.Component<WordProperties, { selected: boolean }> {
   }
 
   render() {
-    const { word } = this.props
-    return <Badge dot={this.state.selected} style={{right: 8}}>
+    const { word, selectedWords } = this.props
+    const isSelected = selectedWords.find(w => w === word.uuid) !== undefined
+
+    return <Badge dot={isSelected} style={{right: 8}}>
       {this.renderWrapper(generateColorForWord(word))}
     </Badge>
   }

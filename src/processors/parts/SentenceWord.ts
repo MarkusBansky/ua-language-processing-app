@@ -1,5 +1,5 @@
 import WordVariation from "./WordVariation"
-import { toFirstUpperLetter } from '../../Utils'
+import { toFirstUpperLetter } from '../../utils/Utils'
 
 const uuidv4 = require('uuid/v4')
 
