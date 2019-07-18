@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { Card, Alert, Divider, Skeleton, Tag } from 'antd'
+import { Card, Divider, Skeleton, Tag } from 'antd'
 import Word from '../../../components/Word'
 import Sentence from '../../../processors/parts/Sentence'
 import { ReducerState } from '../../../modules/reducer';
@@ -42,11 +42,6 @@ class SentencesCard extends
           sentence ? <span key={i}>{this.renderSentence(sentence)}. </span> : ''
         )}
         <Divider dashed />
-        <Alert
-          message="Training and Predicting"
-          description="Some words can have multiple variations available. In the sentence you can only have a single variation selected. To use this service you can adjust each variation selection by hovering the word and selecting correct variation from a dropdown that appears. Later to train the model you may click one of the buttons above, the other one is for predicting."
-          type="info"
-        />
       </Card>
     </Skeleton>
   }

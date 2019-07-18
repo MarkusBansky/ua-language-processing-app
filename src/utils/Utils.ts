@@ -60,7 +60,9 @@ export function generateColorForWord(word: SentenceWord): string {
  * @param s The text that has to be modified.
  */
 export function toFirstUpperLetter(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1)
+  // Gets first char at upper case and contacts to the rest of the string
+  // in the lower case
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 }
 
 /**

@@ -6,6 +6,7 @@ import { ReducerState } from '../../../modules/reducer'
 import Sentence from '../../../processors/parts/Sentence'
 import SentenceWord from '../../../processors/parts/SentenceWord';
 import WordVariation from '../../../processors/parts/WordVariation';
+import { findWordInSentences } from '../../../utils/Utils';
 
 interface StatisticsProps {
   selectedWords: any,
@@ -23,8 +24,6 @@ class Statistics extends React.Component<StatisticsProps, {}> {
       sentences !== nextProps.sentences;
     const selectedWordsUpdated: boolean =
       JSON.stringify(selectedWords) !== JSON.stringify(nextProps.selectedWords)
-
-    // console.log(selectedWords, nextProps.selectedWords)
 
     return sentencesUpdated || selectedWordsUpdated;
   }
@@ -50,17 +49,15 @@ class Statistics extends React.Component<StatisticsProps, {}> {
   renderSelectedWords(): JSX.Element {
     const { sentences, selectedWords } = this.props
 
-    if (Object.keys(selectedWords).length === 0)
+    if (selectedWords.length === 0)
       return this.renderEmpty()
 
     return <Card title="Selected words" size="small" >
       <Timeline style={{ paddingTop: 16 }}>
-        {_.map(sentences, (sentence, sIndex) => sentence.words
-          .filter(word => selectedWords[word.uuid] === true)
-          .map((word, wIndex) =>
-            <Timeline.Item key={sIndex + wIndex} > {this.renderWord(word)} </Timeline.Item>
-          ))
-        }
+        {_.map(selectedWords, (wordId, i) => {
+          let word = findWordInSentences(wordId, sentences) as SentenceWord
+          return <Timeline.Item key={i} > {this.renderWord(word)} </Timeline.Item>
+        })}
       </Timeline>
     </Card>
   }
