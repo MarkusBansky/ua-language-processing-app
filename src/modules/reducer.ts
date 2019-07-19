@@ -1,8 +1,8 @@
 import produce from 'immer'
 import ACTIONS from "./action"
 import { getSentenceFromArray } from "../processors/WordPreprocessor"
-import Sentence from '../processors/parts/Sentence';
-import { message } from 'antd';
+import Sentence from '../processors/parts/Sentence'
+import { message } from 'antd'
 
 export interface ReducerState {
   selectedWords: string[],
@@ -65,6 +65,8 @@ const reducer = (
         draftState.isLoading = false
         draftState.sentences[parsedSentence.sentenceId] = parsedSentence
       })
+
+      message.success('Your text was successfully analysed!')
 
       return newStateWithSentences
 

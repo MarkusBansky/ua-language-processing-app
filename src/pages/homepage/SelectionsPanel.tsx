@@ -2,11 +2,11 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Card, Timeline, Empty } from 'antd'
-import { ReducerState } from '../../../modules/reducer'
-import Sentence from '../../../processors/parts/Sentence'
-import SentenceWord from '../../../processors/parts/SentenceWord';
-import WordVariation from '../../../processors/parts/WordVariation';
-import { findWordInSentences } from '../../../utils/Utils';
+import { ReducerState } from '../../modules/reducer'
+import Sentence from '../../processors/parts/Sentence'
+import SentenceWord from '../../processors/parts/SentenceWord';
+import WordVariation from '../../processors/parts/WordVariation';
+import { findWordInSentences } from '../../utils/Utils';
 
 interface StatisticsProps {
   selectedWords: any,
@@ -16,7 +16,7 @@ interface StatisticsProps {
   reducerError: string
 }
 
-class Statistics extends React.Component<StatisticsProps, {}> {
+class SelectionsPanel extends React.Component<StatisticsProps, {}> {
   shouldComponentUpdate(nextProps: StatisticsProps) {
     const { sentences, selectedWords } = this.props
 
@@ -30,14 +30,8 @@ class Statistics extends React.Component<StatisticsProps, {}> {
 
   renderEmpty() {
     return <Empty
-      image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
-      imageStyle={{height: 60}}
       style={{marginTop: 60}}
-      description={
-        <span>You have no words selected</span>
-      }
-    >
-    </Empty>
+      description={<span>You have no words selected</span>} />
   }
 
   renderWord(word: SentenceWord): JSX.Element {
@@ -77,4 +71,4 @@ const mapStateToProps = (state: ReducerState) => ({
   selectedVariations: state.selectedVariations
 });
 
-export default connect(mapStateToProps, null)(Statistics);
+export default connect(mapStateToProps, null)(SelectionsPanel);

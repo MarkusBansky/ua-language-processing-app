@@ -1,19 +1,17 @@
 import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { Card, Divider, Skeleton, Tag } from 'antd'
-import Word from '../../../components/Word'
-import Sentence from '../../../processors/parts/Sentence'
-import { ReducerState } from '../../../modules/reducer';
-import { WordTagColors } from '../../../utils/Colors';
+import { Card, Divider, Skeleton, Empty } from 'antd'
+import Word from '../../components/Word'
+import Sentence from '../../processors/parts/Sentence'
+import { ReducerState } from '../../modules/reducer'
 
 interface SentencesCardProps {
   sentences: Sentence[],
   isLoading: boolean
 }
 
-class SentencesCard extends
-  React.Component<SentencesCardProps, {}> {
+class AnalysisPanel extends React.Component<SentencesCardProps, {}> {
   constructor(params: any) {
     super(params);
   }
@@ -22,20 +20,18 @@ class SentencesCard extends
     return sentence.words.map((word, i) => <Word key={i} word={word} />)
   }
 
-  displayMarkings() {
-    return _.map(Object.keys(WordTagColors), (color, index) => {
-      return <Tag key={index} color={WordTagColors[color]}>{color}</Tag>
-    })
+  renderEmpty() {
+    return <Empty
+      style={{marginTop: 60}}
+      description={<span>You have no analysed text</span>} />
   }
 
   render() {
     const { sentences, isLoading } = this.props;
 
-    if (sentences.length === 0) return ''
+    if (sentences.length === 0) return this.renderEmpty()
 
     return <Skeleton loading={isLoading} active>
-      {/* <Divider>Word tag markings</Divider>
-      {this.displayMarkings()} */}
       <Divider>Result</Divider>
       <Card>
         {_.map(sentences, (sentence, i) =>
@@ -48,7 +44,8 @@ class SentencesCard extends
 }
 
 const mapStateToProps = (state: ReducerState) => ({
+  sentences: state.sentences,
   isLoading: state.isLoading
 });
 
-export default connect(mapStateToProps, null)(SentencesCard);
+export default connect(mapStateToProps, null)(AnalysisPanel);
