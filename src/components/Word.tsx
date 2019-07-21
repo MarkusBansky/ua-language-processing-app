@@ -4,8 +4,7 @@ import WordWrapper from './WordWrapper'
 import { generateColorForWord } from '../utils/Utils'
 import SentenceWord from '../processors/parts/SentenceWord';
 import { connect } from 'react-redux';
-import ACTIONS from '../modules/action'
-import { ReducerState } from '../modules/reducer';
+import ACTIONS from '../actions/action'
 
 interface WordProperties {
   word: SentenceWord,
@@ -58,8 +57,8 @@ class Word extends React.Component<WordProperties, {}> {
   }
 }
 
-const mapStateToProps = (state: ReducerState) => ({
-  selectedWords: state.selectedWords
+const mapStateToProps = (reducers: any) => ({
+  selectedWords: reducers.reducer.selectedWords
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

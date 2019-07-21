@@ -1,30 +1,30 @@
-import _ from 'lodash'
-import React, {ReactNode} from 'react'
+import React, { ReactNode } from 'react'
+import { connect } from 'react-redux'
 import SelectionsPanel from './SelectionsPanel'
 import { Row, Col, Typography, Tabs } from 'antd'
 import Title from 'antd/lib/typography/Title'
 import TextAnalysisControls from './TextInputPanel'
 import AnalysisPanel from './AnalysisPanel'
+import { switchTabs } from '../../actions/ApplicationActions'
 
 import '../../styles/Homepage.scss'
 
 const COL_WIDTH: number = 16
 const COL_OFFSET: number = (24 - COL_WIDTH) / 2
 
+export enum MenuTabs {
+  Input = 'write',
+  WordOperations = 'selections',
+  AnalysisResults = 'analysis'
+}
+
 /**
  * Main page of the application
  */
-class Homepage extends React.Component<{}, { tab: string }> {
-  constructor(params) {
-    super(params)
-
-    this.state = {
-      tab: 'write'
-    }
-  }
+class Homepage extends React.Component<{ switchTabs: any, selectedTab: string }, {}> {
 
   changeTab = (key: string) => {
-    this.setState({ tab: key })
+    this.props.switchTabs(key)
   }
 
   //Renders header with the logo and title
@@ -38,7 +38,7 @@ class Homepage extends React.Component<{}, { tab: string }> {
   }
 
   renderSelectionsPanel() {
-    return <Tabs.TabPane tab='Selections' key='selections'>
+    return <Tabs.TabPane tab='Selections' key={MenuTabs.WordOperations}>
       <SelectionsPanel />
     </Tabs.TabPane>
   }
@@ -46,7 +46,7 @@ class Homepage extends React.Component<{}, { tab: string }> {
   // Renders the right column wich has a list of selected words
   // with ability to edit each of them and view additional information.
   renderAnalysisPanel() {
-    return <Tabs.TabPane tab='Analysis Results' key='analysis'>
+    return <Tabs.TabPane tab='Analysis Results' key={MenuTabs.AnalysisResults}>
       <AnalysisPanel />
     </Tabs.TabPane>
   }
@@ -54,20 +54,22 @@ class Homepage extends React.Component<{}, { tab: string }> {
   // Renders left column wich has a field to enter the text and the
   // Display field for analysed words.
   renderTextPanel() {
-    return <Tabs.TabPane tab='Input Text' key='write'>
+    return <Tabs.TabPane tab='Input Text' key={MenuTabs.Input}>
       <TextAnalysisControls />
     </Tabs.TabPane>
   }
 
   // Renders the whole page.
   render(): ReactNode {
+    const { selectedTab } = this.props
+
     return <div className='homepage'>
       <Row style={{ paddingTop: '50px' }}>
         {this.renderHeader()}
       </Row>
       <Row>
         <Col span={COL_WIDTH} offset={COL_OFFSET}>
-          <Tabs activeKey={this.state.tab} onChange={this.changeTab}>
+          <Tabs activeKey={selectedTab} onChange={this.changeTab}>
             {this.renderTextPanel()}
             {this.renderAnalysisPanel()}
             {this.renderSelectionsPanel()}
@@ -78,5 +80,14 @@ class Homepage extends React.Component<{}, { tab: string }> {
   }
 }
 
+const mapStateToProps = (reducers: any) => ({
+  selectedWords: reducers.reducer.selectedWords,
+  selectedTab: reducers.applicationStateReducer.selectedMenuTab
+})
+
+const mapDispatchToProps = {
+  switchTabs
+}
+
 // Connect component with mappers
-export default Homepage;
+export default connect(mapStateToProps, mapDispatchToProps)(Homepage);

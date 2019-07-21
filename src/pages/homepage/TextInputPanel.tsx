@@ -1,10 +1,9 @@
 import _ from 'lodash'
 import { connect } from "react-redux"
 import React, { SyntheticEvent } from "react"
-import ACTIONS from "../../modules/action"
+import ACTIONS from '../../actions/action'
 import TextArea from 'antd/lib/input/TextArea'
 import { Alert, Button, PageHeader, Row, Col, Divider } from 'antd'
-import { ReducerState } from '../../modules/reducer'
 import Sentence from '../../processors/parts/Sentence'
 import { pageHeaderContent, pageHeaderExtraContent } from './content/TextInputContent'
 
@@ -174,12 +173,12 @@ class TextInputPanel extends
   }
 }
 
-const mapStateToProps = (state: ReducerState) => ({
-  sentences: state.sentences,
-  isLoading: state.isLoading,
-  reducerError: state.reducerError,
-  selectedVariations: state.selectedVariations,
-  selectedWords: state.selectedWords
+const mapStateToProps = (reducers: any) => ({
+  sentences: reducers.analysisApiReducer.sentences,
+  isLoading: reducers.analysisApiReducer.isAnalysisRequestLoading,
+  reducerError: reducers.reducerError,
+  selectedVariations: reducers.selectedVariations,
+  selectedWords: reducers.selectedWords
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

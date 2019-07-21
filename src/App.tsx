@@ -1,7 +1,7 @@
-import React from "react"
-import Homepage from "./pages/homepage/Homepage"
-import { Provider as ReduxProvider } from "react-redux"
-import configureStore from "./modules/store"
+import React from 'react'
+import Homepage from './pages/homepage/Homepage'
+import { Provider as ReduxProvider } from 'react-redux'
+import configureStore from './utils/StoreConfig'
 
 // Import for ANTD design system.
 import 'antd/dist/antd.css';

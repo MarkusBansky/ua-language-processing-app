@@ -2,7 +2,6 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Card, Timeline, Empty } from 'antd'
-import { ReducerState } from '../../modules/reducer'
 import Sentence from '../../processors/parts/Sentence'
 import SentenceWord from '../../processors/parts/SentenceWord';
 import WordVariation from '../../processors/parts/WordVariation';
@@ -63,12 +62,12 @@ class SelectionsPanel extends React.Component<StatisticsProps, {}> {
   }
 }
 
-const mapStateToProps = (state: ReducerState) => ({
-  sentences: state.sentences,
-  isLoading: state.isLoading,
-  reducerError: state.reducerError,
-  selectedWords: state.selectedWords,
-  selectedVariations: state.selectedVariations
+const mapStateToProps = (reducers: any) => ({
+  sentences: reducers.analysisApiReducer.sentences,
+  isLoading: reducers.analysisApiReducer.isAnalysisRequestLoading,
+  reducerError: reducers.reducer.reducerError,
+  selectedWords: reducers.reducer.selectedWords,
+  selectedVariations: reducers.reducer.selectedVariations
 });
 
 export default connect(mapStateToProps, null)(SelectionsPanel);

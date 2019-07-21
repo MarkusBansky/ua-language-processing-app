@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Card, Divider, Skeleton, Empty } from 'antd'
 import Word from '../../components/Word'
 import Sentence from '../../processors/parts/Sentence'
-import { ReducerState } from '../../modules/reducer'
 
 interface SentencesCardProps {
   sentences: Sentence[],
@@ -12,9 +11,6 @@ interface SentencesCardProps {
 }
 
 class AnalysisPanel extends React.Component<SentencesCardProps, {}> {
-  constructor(params: any) {
-    super(params);
-  }
 
   renderSentence(sentence: Sentence) {
     return sentence.words.map((word, i) => <Word key={i} word={word} />)
@@ -43,9 +39,9 @@ class AnalysisPanel extends React.Component<SentencesCardProps, {}> {
   }
 }
 
-const mapStateToProps = (state: ReducerState) => ({
-  sentences: state.sentences,
-  isLoading: state.isLoading
-});
+const mapStateToProps = (reducers: any) => ({
+  sentences: reducers.analysisApiReducer.sentences,
+  isLoading: reducers.analysisApiReducer.isAnalysisRequestLoading
+})
 
 export default connect(mapStateToProps, null)(AnalysisPanel);
