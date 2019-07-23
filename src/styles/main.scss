@@ -11,3 +11,27 @@
 .padded-col {
   padding: 8px;
 }
+
+.logo {
+  position: 'relative';
+  left: -30px;
+  top: 20px;
+  margin-top: -5px;
+}
+
+.ant-page-header {
+  border: 1px solid rgb(235, 237, 240) !important;
+}
+
+.wrap {
+  display: flex;
+
+  .content {
+    flex: 1;
+  }
+
+  .extraContent {
+    min-width: 220px;
+    text-align: right;
+  }
+}

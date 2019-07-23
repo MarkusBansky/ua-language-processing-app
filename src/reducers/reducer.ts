@@ -1,8 +1,7 @@
 import produce from 'immer'
-import ACTIONS from "./action"
-import { getSentenceFromArray } from "../processors/WordPreprocessor"
-import Sentence from '../processors/parts/Sentence';
-import { message } from 'antd';
+import ACTIONS from '../actions/action'
+import Sentence from '../processors/parts/Sentence'
+import { message } from 'antd'
 
 export interface ReducerState {
   selectedWords: string[],
@@ -54,23 +53,7 @@ const reducer = (
 
       return changedVariationState
 
-    case ACTIONS.Types.ANALYSE_SENTENCES:
-      return { ...state, sentences: [], selectedVariations: {}, selectedWords: [], isLoading: true };
 
-    case ACTIONS.Types.ANALYSE_SENTENCES_SUCCESS:
-      // const parsedSentences = action.payload.data
-      //   .map((d: any, i: number) => getSentenceFromArray(d, i))
-      const parsedSentence = getSentenceFromArray(action.payload.data)
-      const newStateWithSentences = produce(state, draftState => {
-        draftState.isLoading = false
-        draftState.sentences[parsedSentence.sentenceId] = parsedSentence
-      })
-
-      return newStateWithSentences
-
-    case ACTIONS.Types.ANALYSE_SENTENCES_FAIL:
-      message.error('Some error occured during analysis of the sentence.');
-      return { ...state, isLoading: false, reducerError: action.error }
 
     case ACTIONS.Types.TRAIN_TAGS:
       return { ...state, isLoading: true }

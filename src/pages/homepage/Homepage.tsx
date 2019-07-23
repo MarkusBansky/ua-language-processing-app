@@ -1,45 +1,84 @@
-import _ from 'lodash'
-import React, {ReactNode} from 'react'
+import React, { ReactNode } from 'react'
 import { connect } from 'react-redux'
-import Statistics from './parts/Statistics'
-import { Row, Col, Typography } from 'antd'
+import { Row, Col, Typography, Tabs } from 'antd'
 import Title from 'antd/lib/typography/Title'
-import { ReducerState } from '../../modules/reducer'
-import TextAnalysisControls from './parts/TextAnalysisControls'
-import SentencesCard from './parts/SentencesCard';
-import Sentence from '../../processors/parts/Sentence';
+import TextAnalysisControls from './TextInputPanel'
+import AnalysisPanel from './AnalysisPanel'
+import { switchTabs } from '../../actions/ApplicationActions'
 
-class Homepage extends React.Component<{ sentences: Sentence[] }, {}> {
+import '../../styles/Homepage.scss'
+
+const COL_WIDTH: number = 16
+const COL_OFFSET: number = (24 - COL_WIDTH) / 2
+
+export enum MenuTabs {
+  Input = 'write',
+  AnalysisResults = 'analysis'
+}
+
+/**
+ * Main page of the application
+ */
+class Homepage extends React.Component<{ switchTabs: any, selectedTab: string }, {}> {
+
+  changeTab = (key: string) => {
+    this.props.switchTabs(key)
+  }
+
+  //Renders header with the logo and title
+  renderHeader() {
+    return <Col span={COL_WIDTH} offset={COL_OFFSET}>
+      <Typography>
+        <img className='logo' src='/logo.png' alt='ukr_nlp' width='80' />
+        <Title>Ukrainian NLP</Title>
+      </Typography>
+    </Col>
+  }
+
+  // Renders the right column wich has a list of selected words
+  // with ability to edit each of them and view additional information.
+  renderAnalysisPanel() {
+    return <Tabs.TabPane tab='Analysis Results' key={MenuTabs.AnalysisResults}>
+      <AnalysisPanel />
+    </Tabs.TabPane>
+  }
+
+  // Renders left column wich has a field to enter the text and the
+  // Display field for analysed words.
+  renderTextPanel() {
+    return <Tabs.TabPane tab='Input Text' key={MenuTabs.Input}>
+      <TextAnalysisControls />
+    </Tabs.TabPane>
+  }
+
+  // Renders the whole page.
   render(): ReactNode {
-    const { sentences } = this.props
+    const { selectedTab } = this.props
 
-    return <div>
-      <Row style={{ marginTop: '100px' }}>
-        <Col span={12} offset={3} className='padded-col'>
-          <Typography>
-            <Title>Ukrainian NLP</Title>
-          </Typography>
-          <TextAnalysisControls />
-          <SentencesCard sentences={sentences} />
-        </Col>
-        <Col span={6} className='padded-col' >
-        <Typography>
-            <Title level={3}>Selected words</Title>
-          </Typography>
-          <Statistics />
+    return <div className='homepage'>
+      <Row style={{ paddingTop: '50px' }}>
+        {this.renderHeader()}
+      </Row>
+      <Row>
+        <Col span={COL_WIDTH} offset={COL_OFFSET}>
+          <Tabs activeKey={selectedTab} onChange={this.changeTab}>
+            {this.renderTextPanel()}
+            {this.renderAnalysisPanel()}
+          </Tabs>
         </Col>
       </Row>
-      <Row style={{ marginTop: 24 }}>
-        <Col span={18} offset={3} className='padded-col' >
-        </Col>
-      </Row></div>
+    </div>
   }
 }
 
-const mapStateToProps = (state: ReducerState) => ({
-  sentences: state.sentences,
-  isLoading: state.isLoading,
-  reducerError: state.reducerError
-});
+const mapStateToProps = (reducers: any) => ({
+  selectedWords: reducers.reducer.selectedWords,
+  selectedTab: reducers.applicationStateReducer.selectedMenuTab
+})
 
-export default connect(mapStateToProps, null)(Homepage);
+const mapDispatchToProps = {
+  switchTabs
+}
+
+// Connect component with mappers
+export default connect(mapStateToProps, mapDispatchToProps)(Homepage);

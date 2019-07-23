@@ -5,7 +5,7 @@ import { Dropdown, Button, Menu } from 'antd'
 import SentenceWord from '../processors/parts/SentenceWord'
 import WordVariation from '../processors/parts/WordVariation'
 import { ClickParam } from 'antd/lib/menu'
-import ACTIONS from '../modules/action'
+import ACTIONS from '../actions/action'
 
 interface WordTagDropdownProperties {
   word: SentenceWord,
