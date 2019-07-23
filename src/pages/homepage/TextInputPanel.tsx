@@ -148,7 +148,7 @@ class TextInputPanel extends
           </PageHeader>
         </Col>
       </Row>
-      <Divider />
+      <Divider>Enter your text:</Divider>
       <Row>
         <Col>
           <TextArea
