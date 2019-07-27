@@ -8,7 +8,7 @@ interface WordWrapperProperties {
   word: SentenceWord
 }
 
-class WordWrapper extends React.Component<WordWrapperProperties, {}> {
+class WordWithPopover extends React.Component<WordWrapperProperties, {}> {
 
   wrapperTitle(word: SentenceWord) {
     return <b>{word.getTextValue()}</b>
@@ -28,16 +28,16 @@ class WordWrapper extends React.Component<WordWrapperProperties, {}> {
   }
 
   render() {
-    const { word, children } = this.props
+    const { word } = this.props
 
     return <Popover
       content={this.wrapperContent(word)}
       title={this.wrapperTitle(word)}
     >
-      {children}
+      {word.wordValue}
     </Popover>
   }
 
 }
 
-export default WordWrapper
+export default WordWithPopover

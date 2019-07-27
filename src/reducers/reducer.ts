@@ -1,7 +1,7 @@
-import produce from 'immer'
-import ACTIONS from '../actions/action'
-import Sentence from '../processors/parts/Sentence'
-import { message } from 'antd'
+import produce from 'immer';
+import ACTIONS from '../actions/action';
+import Sentence from '../processors/parts/Sentence';
+import { message } from 'antd';
 
 export interface ReducerState {
   selectedWords: string[],
@@ -9,7 +9,7 @@ export interface ReducerState {
   sentences: Sentence[]
   isLoading: boolean,
   reducerError: string
-}
+};
 
 const defaultState: ReducerState = {
   selectedWords: [],
@@ -19,68 +19,78 @@ const defaultState: ReducerState = {
   reducerError: ''
 };
 
-const reducer = (
-  state: ReducerState = defaultState,
-  action: { type: string, payload: any, error: any }
-) => {
+const reducer =
+  (state: ReducerState = defaultState, action: { type: string, payload: any, error: any }) =>
+    produce(state, draftState => {
   switch (action.type) {
+    /**
+     * This is triggered when user clicks on the word to select it.
+     */
     case ACTIONS.Types.TOGGLE_WORD_FOR_TRAINING:
-      const nextState = produce(state, draftState => {
-        let wordWasSelected = draftState.selectedWords
-          .find(w => w === action.payload.wordId)
+      let selectedToggleWord = draftState.selectedWords
+        .find(w => w === action.payload.wordId);
 
-        if (wordWasSelected) {
-          draftState.selectedWords = draftState.selectedWords
-            .filter(w => w !== action.payload.wordId)
-        } else {
-          draftState.selectedWords.push(action.payload.wordId)
-        }
-      })
+      if (selectedToggleWord) {
+        draftState.selectedWords = draftState.selectedWords
+          .filter(w => w !== action.payload.wordId);
+      } else {
+        draftState.selectedWords.push(action.payload.wordId);
+      }
+      break;
 
-      return nextState
-
+    /**
+     * This is triggered when user is changing the variation in the dropdown.
+     */
     case ACTIONS.Types.CHANGE_VARIATION_SELECTION:
-      const changedVariationState = produce(state, draftState => {
-        draftState.selectedVariations[action.payload.wordId] = action.payload.variationId
+      draftState.selectedVariations[action.payload.wordId] = action.payload.variationId;
 
-        let wordWasSelected = draftState.selectedWords
-          .find(w => w === action.payload.wordId)
+      let selectedVariationWord = draftState.selectedWords
+        .find(w => w === action.payload.wordId);
 
-        if (!wordWasSelected) {
-          draftState.selectedWords.push(action.payload.wordId)
-        }
-      })
-
-      return changedVariationState
+      if (!selectedVariationWord) {
+        draftState.selectedWords
+          .push(action.payload.wordId);
+      }
+      break;
 
 
-
+    /**
+     * This part stands dor TRAINING requests in the API
+     * of the neural network.
+     */
     case ACTIONS.Types.TRAIN_TAGS:
-      return { ...state, isLoading: true }
-
+      draftState.isLoading = true;
+      break;
     case ACTIONS.Types.TRAIN_TAGS_SUCCESS:
-      return { ...state, isLoading: false }
-
+      draftState.isLoading = false;
+      break;
     case ACTIONS.Types.TRAIN_TAGS_FAIL:
       message.error('An error occured while trying to send train request to the server.');
-      return { ...state, isLoading: false, reducerError: action.error }
+      draftState.isLoading = false;
+      draftState.reducerError = action.error;
+      break;
 
+    /**
+     * This part of the reduceers stands for PREDICTION requests for the API
+     * of neural network in the ua nlp service.
+     */
     case ACTIONS.Types.PREDICT_TAGS:
-      return { ...state, isLoading: true }
+      draftState.isLoading = true;
+      break;
 
     case ACTIONS.Types.PREDICT_TAGS_SUCCESS:
       for (var i = 0; i < action.payload.data.length; i++) {
-        console.log(action.payload.data[i])
+        console.log(action.payload.data[i]);
       }
-      return { ...state, isLoading: false }
+      draftState.isLoading = false;
+      break;
 
     case ACTIONS.Types.PREDICT_TAGS_FAIL:
       message.error('An error occured while trying to send train request to the server.');
-      return { ...state, isLoading: false, reducerError: action.error }
-
-    default:
-      return state
+      draftState.isLoading = false;
+      draftState.reducerError = action.error;
+      break;
   }
-}
+})
 
 export default reducer

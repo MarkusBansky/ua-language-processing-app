@@ -12,4 +12,4 @@ export enum WordTagColors {
   Adverb = 'green',
   Verb = 'blue',
   Unpredicted = '#ff0000'
-}
+};

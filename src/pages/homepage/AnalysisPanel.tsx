@@ -2,8 +2,8 @@ import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Card, Divider, Skeleton, Empty } from 'antd'
-import Word from '../../components/Word'
 import Sentence from '../../processors/parts/Sentence'
+import SentenceRow from '../../components/SentenceRow'
 
 interface SentencesCardProps {
   sentences: Sentence[],
@@ -11,10 +11,6 @@ interface SentencesCardProps {
 }
 
 class AnalysisPanel extends React.Component<SentencesCardProps, {}> {
-
-  renderSentence(sentence: Sentence) {
-    return sentence.words.map((word, i) => <Word key={i} word={word} />)
-  }
 
   renderEmpty() {
     return <Empty
@@ -30,10 +26,7 @@ class AnalysisPanel extends React.Component<SentencesCardProps, {}> {
     return <Skeleton loading={isLoading} active>
       <Divider>Result</Divider>
       <Card>
-        {_.map(sentences, (sentence, i) =>
-          sentence ? <span key={i}>{this.renderSentence(sentence)}. </span> : ''
-        )}
-        <Divider dashed />
+        {_.map(sentences, (sentence, i) => <SentenceRow key={i} sentence={sentence} />)}
       </Card>
     </Skeleton>
   }
