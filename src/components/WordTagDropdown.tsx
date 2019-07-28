@@ -2,10 +2,10 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from "react-redux"
 import { Dropdown, Button, Menu } from 'antd'
-import SentenceWord from '../processors/parts/SentenceWord'
-import WordVariation from '../processors/parts/WordVariation'
+import SentenceWord from '../models/SentenceWord';
+import WordVariation from '../models/SentenceWordVariation';
 import { ClickParam } from 'antd/lib/menu'
-import ACTIONS from '../actions/action'
+import ACTIONS from '../actions/ApiActions'
 
 interface WordTagDropdownProperties {
   word: SentenceWord,

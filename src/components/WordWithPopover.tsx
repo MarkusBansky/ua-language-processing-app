@@ -1,8 +1,8 @@
 import React from 'react'
 import { Popover } from 'antd'
 import WordTagDropdown from './WordTagDropdown'
-import SentenceWord from '../processors/parts/SentenceWord';
-import WordVariation from '../processors/parts/WordVariation';
+import SentenceWord from '../models/SentenceWord';
+import WordVariation from '../models/SentenceWordVariation';
 
 interface WordWrapperProperties {
   word: SentenceWord

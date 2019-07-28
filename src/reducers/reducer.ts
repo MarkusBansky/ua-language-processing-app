@@ -1,6 +1,6 @@
 import produce from 'immer';
-import ACTIONS from '../actions/action';
-import Sentence from '../processors/parts/Sentence';
+import ACTIONS from '../actions/ApiActions';
+import Sentence from '../models/Sentence';
 import { message } from 'antd';
 
 export interface ReducerState {

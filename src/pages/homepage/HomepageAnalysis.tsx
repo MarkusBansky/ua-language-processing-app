@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Card, Divider, Skeleton, Empty } from 'antd'
-import Sentence from '../../processors/parts/Sentence'
+import Sentence from '../../models/Sentence'
 import SentenceRow from '../../components/SentenceRow'
 
 interface SentencesCardProps {

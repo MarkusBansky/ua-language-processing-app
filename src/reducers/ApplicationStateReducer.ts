@@ -1,8 +1,8 @@
-import IApplicationState from './states/IApplicationState'
+import IApplicationState from '../interfaces/IApplicationState'
 import { MenuTabs } from '../pages/homepage/Homepage'
-import IApplicationAction from './actions/IApplicationAction'
-import ApplicationActionTypes from '../actions/types/ApplicationActionTypes'
-import AnalysisActionTypes from '../actions/types/AnalysisApiTypes'
+import IApplicationAction from '../interfaces/IApplicationAction'
+import ApplicationActionTypes from '../types/ApplicationActionTypes'
+import AnalysisActionTypes from '../types/AnalysisApiTypes'
 import produce from 'immer'
 
 const applicationState: IApplicationState = {

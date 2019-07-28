@@ -1,12 +1,12 @@
-import SentenceWord from "./SentenceWord";
+import SentenceWord from './SentenceWord';
 
 export default class Sentence {
-  public words: SentenceWord[] = []
-  public sentenceId: number = 0
+  public words: SentenceWord[];
+  public sentenceId: number;
 
   constructor(words: SentenceWord[], index: number) {
-    this.words = words
-    this.sentenceId = index
+    this.sentenceId = index;
+    this.words = words;
   }
 
   public getId(): number {

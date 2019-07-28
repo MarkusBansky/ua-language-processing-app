@@ -1,7 +1,7 @@
 
 import _ from 'lodash'
 import React from 'react'
-import Sentence from '../processors/parts/Sentence'
+import Sentence from '../models/Sentence'
 import { Row, Col } from 'antd'
 import Word from './Word';
 

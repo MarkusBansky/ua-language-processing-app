@@ -1,17 +1,17 @@
-import VariationTag from "./VariationTag"
-import { extractPosTag } from '../../utils/Utils'
-import { toFirstUpperLetter } from '../../utils/Utils'
+import VariationTag from './SentenceWordVariationTag';
+import { extractPosTag } from '../utils/Utils';
+import { toFirstUpperLetter } from '../utils/Utils';
 
-const uuidv4 = require('uuid/v4')
+const uuidv4 = require('uuid/v4');
 
 export default class WordVariation {
-  relevantWordId: number = 0
-  uuid: string = ''
+  relevantWordId: number;
+  uuid: string;
 
-  posOriginalForm: string = ''
-  posTag: VariationTag | null = null
-  additionalTags: VariationTag[] = []
-  probability: number = 0
+  posOriginalForm: string;
+  posTag: VariationTag | null;
+  additionalTags: VariationTag[];
+  probability: number = 0;
 
   constructor(variation: any) {
     this.relevantWordId = variation.id

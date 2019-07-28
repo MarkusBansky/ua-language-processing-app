@@ -1,11 +1,11 @@
-import React from 'react'
-import { Tooltip } from 'antd'
-import SentenceWord from '../processors/parts/SentenceWord'
+import React from 'react';
+import { Tooltip } from 'antd';
+import SentenceWord from '../models/SentenceWord';
 import { toFirstUpperLetter } from '../utils/Utils';
 
 interface WordWithTooltipProps {
-  word: SentenceWord
-}
+  word: SentenceWord;
+};
 
 class WordWithTooltip extends React.Component<WordWithTooltipProps, {}> {
   wrapperTitle(word: SentenceWord) {
@@ -15,7 +15,7 @@ class WordWithTooltip extends React.Component<WordWithTooltipProps, {}> {
   }
 
   render() {
-    const { word } = this.props
+    const { word } = this.props;
 
     return (
       <Tooltip title={this.wrapperTitle(word)}>
@@ -24,6 +24,6 @@ class WordWithTooltip extends React.Component<WordWithTooltipProps, {}> {
     )
   }
 
-}
+};
 
-export default WordWithTooltip
+export default WordWithTooltip;

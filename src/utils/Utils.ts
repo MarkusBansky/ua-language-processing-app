@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import VariationTag from '../processors/parts/VariationTag';
-import SentenceWord from '../processors/parts/SentenceWord';
-import Sentence from '../processors/parts/Sentence';
+import VariationTag from '../models/SentenceWordVariationTag';
+import Sentence from '../models/Sentence';
 import { WordTagColors } from './Colors';
+import SentenceWord from '../models/SentenceWord';
 
 /**
  * Searches for a desired word in chosen array of sentences.

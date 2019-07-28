@@ -1,4 +1,4 @@
-import Sentence from '../../processors/parts/Sentence';
+import Sentence from '../models/Sentence';
 
 export default interface IAnalysisApiState {
   sentences: Sentence[],

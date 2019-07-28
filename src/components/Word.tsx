@@ -2,9 +2,9 @@ import React from 'react'
 import { Badge } from 'antd'
 import WordWithPopover from './WordWithPopover'
 import { generateColorForWord } from '../utils/Utils'
-import SentenceWord from '../processors/parts/SentenceWord'
+import SentenceWord from '../models/SentenceWord';
 import { connect } from 'react-redux'
-import ACTIONS from '../actions/action'
+import ACTIONS from '../actions/ApiActions'
 import WordWithTooltip from './WordWithTooltip'
 
 import '../styles/Word.scss'

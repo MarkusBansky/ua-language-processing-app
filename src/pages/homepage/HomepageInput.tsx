@@ -1,11 +1,11 @@
 import _ from 'lodash'
 import { connect } from "react-redux"
 import React, { SyntheticEvent } from "react"
-import ACTIONS from '../../actions/action'
+import ACTIONS from '../../actions/ApiActions'
 import TextArea from 'antd/lib/input/TextArea'
 import { Alert, Button, PageHeader, Row, Col, Divider } from 'antd'
-import Sentence from '../../processors/parts/Sentence'
-import { pageHeaderContent, pageHeaderExtraContent } from './content/TextInputContent'
+import Sentence from '../../models/Sentence'
+import { pageHeaderContent, pageHeaderExtraContent } from './HomepageHeader'
 
 interface TextAnalysisControlsProps {
   sentences: Sentence[],

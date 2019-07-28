@@ -1,9 +1,9 @@
 import produce from 'immer'
 import { message } from 'antd'
-import ACTIONS from '../actions/action'
-import IAnalysisApiState from './states/IAnalysisApiState'
-import IAnalysisApiAction from './actions/IAnalysisApiAction'
-import { getSentenceFromArray } from '../processors/WordPreprocessor'
+import ACTIONS from '../actions/ApiActions'
+import IAnalysisApiState from '../interfaces/IAnalysisApiState'
+import IAnalysisApiAction from '../interfaces/IAnalysisApiAction'
+import { getSentenceFromArray } from '../utils/ExtentionsSentence'
 
 const initialState: IAnalysisApiState = {
   sentences: [],
