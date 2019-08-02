@@ -1,37 +1,61 @@
-import IApplicationState from '../interfaces/IApplicationState'
-import { MenuTabs } from '../pages/homepage/Homepage'
-import IApplicationAction from '../interfaces/IApplicationAction'
-import ApplicationActionTypes from '../types/ApplicationActionTypes'
-import AnalysisActionTypes from '../types/AnalysisApiTypes'
-import produce from 'immer'
+import IApplicationState from '../interfaces/IApplicationState';
+import { MenuTabs } from '../pages/homepage/Homepage';
+import IApplicationAction from '../interfaces/IApplicationAction';
+import ApplicationActionTypes from '../types/ApplicationActionTypes';
+import AnalysisActionTypes from '../types/AnalysisApiTypes';
+import produce from 'immer';
+import ApiActions from '../actions/ApiActions';
 
-const applicationState: IApplicationState = {
-  selectedMenuTab: MenuTabs.Input
-}
+export const applicationState: IApplicationState = {
+  selectedMenuTab: MenuTabs.Input,
+  selectedWords: [],
+  selectedVariations: []
+};
 
-function applicationStateReducer(initialState = applicationState, action: IApplicationAction) {
+const applicationStateReducer = (initialState = applicationState, action: IApplicationAction) => produce(initialState, draftState => {
   switch (action.type) {
+    /**
+     * This is triggered when user clicks on the word to select it.
+     */
+    case ApiActions.Types.TOGGLE_WORD_FOR_TRAINING:
+      let selectedToggleWord = draftState.selectedWords
+        .find(w => w === action.payload.wordId);
+
+      if (selectedToggleWord) {
+        draftState.selectedWords = draftState.selectedWords
+          .filter(w => w !== action.payload.wordId);
+      } else {
+        draftState.selectedWords.push(action.payload.wordId!);
+      }
+      break;
+
+    /**
+     * This is triggered when user is changing the variation in the dropdown.
+     */
+    case ApiActions.Types.CHANGE_VARIATION_SELECTION:
+      draftState.selectedVariations[action.payload.wordId!] = action.payload.variationId;
+
+      let selectedVariationWord = draftState.selectedWords
+        .find(w => w === action.payload.wordId);
+
+      if (!selectedVariationWord) {
+        draftState.selectedWords
+          .push(action.payload.wordId!);
+      }
+      break;
     /**
      * Triggered when setnences analysis API request finished successfully.
      */
     case AnalysisActionTypes.ANALYSE_SENTENCES_SUCCESS:
-      return produce(initialState, draft => {
-        draft.selectedMenuTab = MenuTabs.AnalysisResults
-      })
-
+      draftState.selectedMenuTab = MenuTabs.AnalysisResults
+      break;
     /**
      * An event used to change the menu tab.
      */
     case ApplicationActionTypes.SWITCH_MENU_TAB:
-      return produce(initialState, draft => {
-        draft.selectedMenuTab = action.payload.menuTagSelection as string
-      })
-    /**
-     * In case the reducer does not have this action type.
-     */
-    default:
-      return initialState
+      draftState.selectedMenuTab = action.payload.menuTagSelection as string
+      break;
   }
-}
+});
 
 export default applicationStateReducer

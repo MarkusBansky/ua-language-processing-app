@@ -7,6 +7,7 @@ import AnalysisPanel from './HomepageAnalysis';
 import { switchTabs } from '../../actions/ApplicationActions';
 
 import '../../styles/Homepage.scss';
+import ICombinedReducer from '../../interfaces/ICombinedReducer';
 
 const COL_WIDTH: number = 16;
 const COL_OFFSET: number = (24 - COL_WIDTH) / 2;
@@ -77,8 +78,8 @@ class Homepage extends React.Component<{ switchTabs: any, selectedTab: string },
   }
 };
 
-const mapStateToProps = (reducers: any) => ({
-  selectedWords: reducers.reducer.selectedWords,
+const mapStateToProps = (reducers: ICombinedReducer) => ({
+  selectedWords: reducers.applicationStateReducer.selectedWords,
   selectedTab: reducers.applicationStateReducer.selectedMenuTab
 });
 

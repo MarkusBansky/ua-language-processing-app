@@ -6,6 +6,7 @@ import TextArea from 'antd/lib/input/TextArea'
 import { Alert, Button, PageHeader, Row, Col, Divider } from 'antd'
 import Sentence from '../../models/Sentence'
 import { pageHeaderContent, pageHeaderExtraContent } from './HomepageHeader'
+import ICombinedReducer from '../../interfaces/ICombinedReducer';
 
 interface TextAnalysisControlsProps {
   sentences: Sentence[],
@@ -173,12 +174,12 @@ class TextInputPanel extends
   }
 }
 
-const mapStateToProps = (reducers: any) => ({
+const mapStateToProps = (reducers: ICombinedReducer) => ({
   sentences: reducers.analysisApiReducer.sentences,
   isLoading: reducers.analysisApiReducer.isAnalysisRequestLoading,
-  reducerError: reducers.reducerError,
-  selectedVariations: reducers.selectedVariations,
-  selectedWords: reducers.selectedWords
+  reducerError: reducers.apiNeuralNetworkReducer.reducerError,
+  selectedVariations: reducers.applicationStateReducer.selectedVariations,
+  selectedWords: reducers.applicationStateReducer.selectedWords
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

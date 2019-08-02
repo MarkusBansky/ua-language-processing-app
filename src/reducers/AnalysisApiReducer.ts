@@ -5,7 +5,7 @@ import IAnalysisApiState from '../interfaces/IAnalysisApiState'
 import IAnalysisApiAction from '../interfaces/IAnalysisApiAction'
 import { getSentenceFromArray } from '../utils/ExtentionsSentence'
 
-const initialState: IAnalysisApiState = {
+export const initialState: IAnalysisApiState = {
   sentences: [],
   isAnalysisRequestLoading: false
 }

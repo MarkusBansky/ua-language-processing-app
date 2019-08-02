@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Card, Divider, Skeleton, Empty } from 'antd'
 import Sentence from '../../models/Sentence'
 import SentenceRow from '../../components/SentenceRow'
+import ICombinedReducer from '../../interfaces/ICombinedReducer';
 
 interface SentencesCardProps {
   sentences: Sentence[],
@@ -32,7 +33,7 @@ class AnalysisPanel extends React.Component<SentencesCardProps, {}> {
   }
 }
 
-const mapStateToProps = (reducers: any) => ({
+const mapStateToProps = (reducers: ICombinedReducer) => ({
   sentences: reducers.analysisApiReducer.sentences,
   isLoading: reducers.analysisApiReducer.isAnalysisRequestLoading
 })

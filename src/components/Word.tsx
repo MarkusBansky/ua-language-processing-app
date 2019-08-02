@@ -8,6 +8,7 @@ import ACTIONS from '../actions/ApiActions'
 import WordWithTooltip from './WordWithTooltip'
 
 import '../styles/Word.scss'
+import ICombinedReducer from '../interfaces/ICombinedReducer';
 
 interface WordProperties {
   word: SentenceWord,
@@ -21,9 +22,12 @@ class Word extends React.Component<WordProperties, {}> {
     this.toggleWordSelection = this.toggleWordSelection.bind(this)
   }
 
+  /**
+  * Used to call the toggling word function
+  */
   toggleWordSelection(wordId: string) {
     const { toggleWordForTraining } = this.props
-    toggleWordForTraining(wordId)
+    toggleWordForTraining(wordId);
   }
 
   renderWrapper(color: string) {
@@ -37,18 +41,18 @@ class Word extends React.Component<WordProperties, {}> {
             : <WordWithTooltip word={word} />
         }
       </span>
-    )
+    );
   }
 
   renderSelectionBadge() {
-    const { word, selectedWords } = this.props
-    const isSelected = selectedWords.find((wordId: string) => wordId === word.uuid) !== undefined
+    const { word, selectedWords } = this.props;
+    const isSelected = selectedWords.find((wordId: string) => wordId === word.uuid) !== undefined;
 
     return (
       <Badge dot={isSelected} style={{right: 8}}>
         {this.renderWrapper(generateColorForWord(word))}
       </Badge>
-    )
+    );
   }
 
   render() {
@@ -60,12 +64,12 @@ class Word extends React.Component<WordProperties, {}> {
   }
 }
 
-const mapStateToProps = (reducers: any) => ({
-  selectedWords: reducers.reducer.selectedWords
+const mapStateToProps = (reducers: ICombinedReducer) => ({
+  selectedWords: reducers.applicationStateReducer.selectedWords
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-  toggleWordForTraining: (wordId: string) => dispatch(ACTIONS.toggleWordForTraining(wordId))
-});
+const mapDispatchToProps = {
+  toggleWordForTraining: ACTIONS.toggleWordForTraining
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Word);
